@@ -3,10 +3,13 @@ import "./css/SignIn.css";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 
 const SignUp = () => {
   let history = useHistory();
+
   const [name, nameSet] = useState("");
+  const [img, setImg] = useState("");
   const [password, passwordSet] = useState("");
   const [email, emailSet] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -15,6 +18,7 @@ const SignUp = () => {
     history.push("/signin");
     try {
       await axios.post("/api/user/signup", {
+        userImage : img,
         name: name,
         email: email,
         password: password,
@@ -28,17 +32,22 @@ const SignUp = () => {
   return (
     <div className="signup">
       <Link to="/">
-        <img
-          className="signin_logo"
-          src="https://raw.githubusercontent.com/Jassi10000/AlanEats/main/frontend/src/images/AlanEatsLogo.png?token=GHSAT0AAAAAABRLSBBNI2JBVQOF3XCZXQREYRI3J6A
-"
-          alt="alan eats logo"
-        />
+      <img src={AlanEatsLogo} className="signin_logo" alt="alan eat" />
       </Link>
       <div className="signin_container">
         <h1>Sign-up</h1>
         <form>
           <h5>Username</h5>
+          <input
+            type="file"
+            accept="image/*"
+            placeholder="Your Name"
+            onChange={(e) => {
+              setImg(URL.createObjectURL(e.target.files[0]))
+              }
+            }
+          />
+
           <input
             type="text"
             placeholder="Your Name"

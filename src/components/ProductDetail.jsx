@@ -24,6 +24,7 @@ const ProductDetail = () => {
         food: foodId,
         user: user[0]._id.trim(),
       });
+      document.location.reload(true)
     } catch (err) {
       console.log(err);
     }

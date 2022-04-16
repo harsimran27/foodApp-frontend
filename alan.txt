@@ -17,6 +17,7 @@ intent('(Hello|hi|hey) alan',async(p)=>{
 const confirmation = context(()=>{
     intent("yes",(p)=>{
 //         p.play("sure you can leave a note to the chef and customise the ingredients in your food items");
+
         p.play("sure you can add or remove items in your cart according to your preference");
     })
     intent("no",async(p)=>{

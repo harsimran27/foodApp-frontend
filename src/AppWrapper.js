@@ -8,6 +8,8 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Footer from "./components/Footer";
 import MainImage from './components/MainImage';
+import Payment from './components/Payment';
+
 
 const AppWrapper = () => {
     return (
@@ -22,6 +24,10 @@ const AppWrapper = () => {
                 <Route path="/signin">
                     <SignIn />
                 </Route>
+                <Route path="/payment">
+                    <Payment/>
+                </Route>
+
                 <Route path="/signup">
                     <SignUp />
                 </Route>
@@ -31,7 +37,7 @@ const AppWrapper = () => {
                     {/* <Footer /> */}
                 </Route>
                 <Route path="/checkout">
-                    <Navbar />
+                    {/* <Navbar /> */}
                     <Checkout />
                     {/* <Footer /> */}
                 </Route>

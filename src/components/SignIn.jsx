@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { userCreator } from "../redux/actions/userActions";
+import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 
 const SignIn = () => {
   let dispatch = useDispatch();
@@ -22,6 +23,7 @@ const SignIn = () => {
         email: email,
         password: password,
       });
+      console.log(user);
       return user;
     } catch (err) {
       console.log(err);
@@ -31,12 +33,7 @@ const SignIn = () => {
   return (
     <div className="signin">
       <Link to="/">
-        <img
-          className="signin_logo"
-          src="https://raw.githubusercontent.com/Jassi10000/AlanEats/main/frontend/src/images/AlanEatsLogo.png?token=GHSAT0AAAAAABRLSBBNI2JBVQOF3XCZXQREYRI3J6A
-"
-          alt="alan eats logo"
-        />
+      <img src={AlanEatsLogo} className="signin_logo" alt="alan eat" />
       </Link>
       <div className="signin_container">
         <h1>Sign-in</h1>
@@ -58,7 +55,7 @@ const SignIn = () => {
             className="sign_inButton"
             onClick={async () => {
               let user = await handleSignin();
-              userData.push(user.data.user);
+              userData.push(user?.data?.user);
               localStorage.setItem("user logged in", JSON.stringify(userData));
               dispatch(userCreator(true));
             }}

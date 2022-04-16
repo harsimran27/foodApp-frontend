@@ -1,8 +1,12 @@
 import React from "react";
 import CurrencyFormat from "react-currency-format";
+import { useHistory } from "react-router-dom";
 import "./css/Subtotal.css";
+import Payment from "./Payment";
 
-const Subtotal = ({ price, items }) => {
+const Subtotal = ({ price, items ,setShowPay }) => {
+  const history = useHistory();
+
   return (
     <div className="subtotal">
       <CurrencyFormat
@@ -23,7 +27,10 @@ const Subtotal = ({ price, items }) => {
         thousandSeparator={true}
         prefix={"₹"}
       />
-      <button className="subtotal_button">Proceed to checkout</button>
+      <button onClick = {()=> {
+        setShowPay(true);
+        // history.push("/payment/:price")
+        }}  className="subtotal_button">Proceed to checkout</button>
     </div>
   );
 };
