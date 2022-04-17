@@ -1,12 +1,13 @@
 import React from "react";
 import "./css/Footer.css";
+import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 
 const Footer = () => {
   return (
     <div className="footer">
       <div className="alan_logo">
         <img
-          src="https://raw.githubusercontent.com/Jassi10000/AlanEats/main/frontend/src/images/AlanEatsLogo.png?token=GHSAT0AAAAAABRLSBBNORBTJCYAOI22UQNCYQYUG5A"
+          src={AlanEatsLogo}
           alt=""
         />
       </div>

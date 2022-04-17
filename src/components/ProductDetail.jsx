@@ -18,6 +18,7 @@ const ProductDetail = () => {
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
 
+  
   let addToCart = async () => {
     try {
       await axios.post("/api/user/cart", {
@@ -32,18 +33,25 @@ const ProductDetail = () => {
 
   let getFoodDetails = () => {
     axios
-      .get(`/api/food/${foodId}`)
-      .then((res) => {
-        console.log(res);
-        setDetails(res.data.data);
-        setIngredients(res.data.data.ingredients);
-        reviewsList = res.data.data.reviews;
-      })
-      .then(async () => {
-        let arr = await getReview();
-        setReviewData(arr);
-      });
+    .get(`/api/food/${foodId}`)
+    .then((res) => {
+      console.log(res);
+      setDetails(res.data.data);
+      setIngredients(res.data.data.ingredients);
+      reviewsList = res.data.data.reviews;
+    })
+    .then(async () => {
+      let arr = await getReview();
+      setReviewData(arr);
+    });
   };
+
+  useEffect(()=>{
+    getFoodDetails();
+  },[foodId]);
+
+  console.log("FoodId:",foodId)
+
 
   let getReview = async () => {
     try {

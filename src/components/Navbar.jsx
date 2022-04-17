@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userCreator } from "../redux/actions/userActions";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
+import axios from "axios";
 
 const Navbar = () => {
   let history = useHistory();
@@ -17,9 +18,28 @@ const Navbar = () => {
   let userStatus = useSelector((state) => state);
 
   const [show, handleShow] = useState(false);
+  const [foodItems, setFoodItems] = useState([]);
+  const [searchFood,setSearchFood] = useState("");
 
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
+
+  const searchFoodItem = () => {
+    let getFood = foodItems.filter((food)=>{
+      console.log(food.label.includes(searchFood));
+      if(food.label.includes(searchFood)){ 
+        return food;
+      }
+    })
+    console.log(getFood);
+  
+    if(getFood.length === 0){
+      alert("No result Found...");
+      history.push("/")
+    } 
+    else
+      history.push(`/productDetail/${getFood[0]._id}`)
+  }   
 
   useEffect(() => {
     // console.log(history);
@@ -35,6 +55,20 @@ const Navbar = () => {
     };
   }, []);
 
+ const getAllFoodItems = () => {
+    axios.get("/api/food").then((res) => {
+      setFoodItems(res.data.data);
+      
+    });
+  };
+
+  useEffect(() => {
+    getAllFoodItems();
+  }, []);
+
+  console.log(foodItems);
+ 
+
   return (
     <div className={`nav ${show && "nav_black"}`}>
       <Link to="/">
@@ -42,8 +76,16 @@ const Navbar = () => {
       </Link>
 
       <div className="nav_search">
-        <input type="text" placeholder="Search your fav food item" />
-        <SearchIcon className="nav_searchIcon" />
+        <input type="text" value = {searchFood} onKeyDown = {(e)=>{
+          if(e.keyCode === 13){
+            setSearchFood("")
+            searchFoodItem()
+          }
+          }} onChange={(e)=> setSearchFood(e.target.value)} placeholder= "Search your fav food item"/>
+        <SearchIcon className="nav_searchIcon" onClick = { () =>{
+          setSearchFood("")
+          searchFoodItem();
+        }} />
       </div>
 
       <div className="nav_header">
