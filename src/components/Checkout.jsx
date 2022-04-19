@@ -12,10 +12,33 @@ const Checkout = () => {
   let cartData = [];
   let totalCartPrice = 0;
   let totalItems = 0;
+  let temp1;
   let [foodData, setFoodData] = useState([]);
   let [showPay,setShowPay] = useState(false);
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
+  let map = new Map();
+  const [map1,setMap1] = useState(map);
+
+
+  const setFoodQty = () => {
+    let arr = cartData;
+    for(let i = 0;i<arr.length;i++){
+      if(map.has(arr[i])){
+        let qty = map.get(arr[i]);
+        map.set(arr[i],parseInt(qty) + 1);
+      }else{
+        map.set(arr[i],1);
+      }
+    }
+    setMap1(map);
+    let temp = [...map.keys()];
+    return temp;
+  }
+
+  // useEffect(()=>{
+  //   setFoodQty();
+  // },[])
 
   const getUser = async () => {
 
@@ -23,21 +46,20 @@ const Checkout = () => {
       .get(`/api/user/${user[0]._id}`)
       .then((res) => {
         cartData = res.data.user.cart;
+        temp1 = setFoodQty();
         console.log(cartData);
       })
       .then(async () => {
         let arr = await getFoodData();
         setFoodData(arr);
-        // if(cartData?.length === arr.length)
-        //   document.location.reload(true)
       });
   };
 
   let getFoodData = async () => {
     try {
-      let arr = [];
+      let arr = []; 
       arr = await Promise.all(
-        cartData.map(async (id) => {
+        temp1.map(async (id) => {
           let res = await axios.get(`/api/food/${id}`);
           return res.data.data;
         })
@@ -48,7 +70,7 @@ const Checkout = () => {
       console.log(err);
     }
   };
-  console.log(foodData);
+
 
   let removeFromCart = async (foodId) => {
     try {
@@ -65,7 +87,7 @@ const Checkout = () => {
   useEffect(() => {
     if(user?.length !== 0)
       getUser();
-  }, []);
+  },[]);
 
 
   
@@ -75,8 +97,8 @@ const Checkout = () => {
     {
       (foodData.length > 0
             && foodData.map((item) => {
-                totalItems = totalItems + parseInt(item.qty);
-                totalCartPrice = totalCartPrice + item.price * item.qty;
+                totalItems = totalItems + map1.get(item._id);
+                totalCartPrice = totalCartPrice + item.price *  map1.get(item._id);
               }) && 
       showPay) ? ( <Payment price = {totalCartPrice} />) : (<>
         <Navbar/>
@@ -87,8 +109,8 @@ const Checkout = () => {
         <div className="subtotal-container">
           {foodData.length > 0 && totalCartPrice === 0 
             ? foodData.map((item) => {
-                totalItems = totalItems + parseInt(item.qty);
-                totalCartPrice = totalCartPrice + item.price * item.qty;
+                totalItems = totalItems +map1.get(item._id);
+                totalCartPrice = totalCartPrice + item.price * map1.get(item._id);
               })
             : foodData.length}
           <Subtotal price={totalCartPrice} setShowPay = {setShowPay} items={totalItems} />
@@ -106,12 +128,14 @@ const Checkout = () => {
                 <button
                   className="deleteBtn"
                   onClick={() => {
+                    if(map1.get(foodItem._id) > 1)
+                      map1.set(foodItem._id,map1.get(foodItem._id) - 1)
                     removeFromCart(foodItem._id);
                   }}
                 >
                   Delete
                 </button>
-                <p>{`Qty: ${foodItem.qty}`}</p>
+                <p>{`Qty: ${map1.get(foodItem._id)}`}</p>
               </div>
             </div>
           ))}

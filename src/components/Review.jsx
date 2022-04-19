@@ -10,14 +10,18 @@ const Review = ({ reviewDetails }) => {
   const [userImage, setUserImage] = useState("");
 
   const getUserData = async () => {
+    let userData;
+    console.log("rEVIEWdETAILS : ",reviewDetails);
     try {
-      let userData = await axios.get(`/api/user/${reviewDetails.user}`);
+     userData = await axios.get(`/api/user/${reviewDetails.user}`);
       setUserName(userData.data.user.name);
       setUserImage(userData.data.user.userImage);
     } catch (err) {
       console.log(err);
     }
+    console.log(userData);
   };
+
 
   useEffect(() => {
     getUserData();
@@ -30,8 +34,8 @@ const Review = ({ reviewDetails }) => {
         <p>{userName}</p>
       </div>
       <div className="food_rating">
-        <Rating value={reviewDetails.rating} precision={0.5} />
-        <span className="time_stamp">{reviewDetails.createdAt}</span>
+        <Rating readOnly value={reviewDetails.rating} precision={0.5} />
+        <span className="time_stamp">{new Date(reviewDetails.createdAt).toLocaleDateString()}</span>
       </div>
       <p>{reviewDetails.description}</p>
     </div>

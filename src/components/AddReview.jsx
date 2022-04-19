@@ -20,7 +20,7 @@ const labels = {
 };
 
 const AddReview = ({ itemDetails }) => {
-  let [value, setValue] = useState("");
+  let [value, setValue] = useState(0.5);
   let [hover, setHover] = useState("");
   let [reviewDescription, setReviewDescription] = useState("");
 
@@ -28,6 +28,7 @@ const AddReview = ({ itemDetails }) => {
   let user = JSON.parse(userCredentials);
 
   const handleReviewRequest = async () => {
+    console.log("Value",value);
     try {
       await axios.post("/api/review", {
         description: reviewDescription,
@@ -61,7 +62,13 @@ const AddReview = ({ itemDetails }) => {
               value={value}
               precision={0.5}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                  // console.log(newValue,value);
+                if(newValue === null){
+                  newValue = 0.5
+                  setValue(0.5);
+                }else
+                  setValue(newValue);
+                console.log(newValue,value);
               }}
               onChangeActive={(event, newHover) => {
                 setHover(newHover);
@@ -70,9 +77,9 @@ const AddReview = ({ itemDetails }) => {
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            {value !== null && (
+            {/* {value !== null && (
               <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
-            )}
+            )} */}
           </Box>
         </div>
       </div>
