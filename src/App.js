@@ -5,7 +5,8 @@ import axios from "axios";
 // import AppWrapper from "../src/AppWrapper";
 import Navbar from "./components/Navbar";
 import FoodRow from "./components/FoodRow";
-import { BrowserRouter as Router, Switch, Route, Link, useHistory, Redirect } from "react-router-dom";
+// import { BrowserRouter as Router, Switch, Route, Link, useHistory, Redirect } from "react-router-dom";
+import { Switch, Route, Link, useHistory, Redirect } from "react-router-dom";
 import ProductDetail from "./components/ProductDetail";
 import Checkout from "./components/Checkout";
 import SignIn from "./components/SignIn";
@@ -13,14 +14,13 @@ import SignUp from "./components/SignUp";
 import Footer from "./components/Footer";
 import MainImage from './components/MainImage';
 import Payment from './components/Payment';
-// import { navigate } from 'hookrouter';
-// import { hashHistory } from 'react-router'
+import { useDispatch } from 'react-redux';
+import { PayAction } from "./redux/actions/payAction";
 
 
 let App = () => {
-
+  const dispatch = useDispatch();
   const history = useHistory();
-  console.log(history);
 
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
@@ -68,16 +68,12 @@ let App = () => {
             removeFromCart(foodId);
           }
         } else if (commandData.command === "showcart") {
-          // console.log(route);
-          // console.log(history);
-          // history.push('/checkout');
-          // <Redirect to="/checkout" />
-          // useRedirect('/user', '/dashboard');
+          dispatch(PayAction(false))
+          history.push('/checkout');
 
-          window.location.href = '/checkout';
-          // alanBtnInstance.activate()
-          // window.scrollBy(0, window.innerHeight);'
-          // navigate('/checkout', true);
+        } else if (commandData.command === "payment") {
+          dispatch(PayAction(true))
+          // history.push('/p');
         }
       }
     });
@@ -104,42 +100,37 @@ let App = () => {
     } catch (err) {
       console.log(err);
     }
-    // document.location.reload(true)
   };
 
   return (
     // <AppWrapper />
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Navbar />
-          <MainImage />
-          <FoodRow />
-          <FoodRow />
-          <Footer />
-        </Route>
-        <Route path="/signin">
-          <SignIn />
-        </Route>
-        <Route path="/payment">
-          <Payment />
-        </Route>
-
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-        <Route path="/productDetail/:foodId" >
-          <Navbar />
-          <ProductDetail />
-          <Footer />
-        </Route>
-        <Route path="/checkout">
-          {/* <Navbar /> */}
-          <Checkout />
-          <Footer />
-        </Route>
-      </Switch>
-    </Router>
+    <Switch>
+      <Route exact path="/">
+        <Navbar />
+        <MainImage />
+        <FoodRow />
+        <FoodRow />
+        <Footer />
+      </Route>
+      <Route path="/signin">
+        <SignIn />
+      </Route>
+      <Route path="/payment">
+        <Payment />
+      </Route>
+      <Route path="/signup">
+        <SignUp />
+      </Route>
+      <Route path="/productDetail/:foodId" >
+        <Navbar />
+        <ProductDetail />
+        <Footer />
+      </Route>
+      <Route path="/checkout">
+        <Checkout />
+        <Footer />
+      </Route>
+    </Switch>
   );
 }
 

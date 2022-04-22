@@ -15,31 +15,27 @@ const Navbar = () => {
   let dispatch = useDispatch();
   // console.log(history);
 
-  let userStatus = useSelector((state) => state);
-
   const [show, handleShow] = useState(false);
   const [foodItems, setFoodItems] = useState([]);
-  const [searchFood,setSearchFood] = useState("");
+  const [searchFood, setSearchFood] = useState("");
 
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
 
   const searchFoodItem = () => {
-    let getFood = foodItems.filter((food)=>{
+    let getFood = foodItems.filter((food) => {
       console.log(food.label.includes(searchFood));
-      if(food.label.includes(searchFood)){ 
+      if (food.label.includes(searchFood)) {
         return food;
       }
-    })
+    });
     console.log(getFood);
-  
-    if(getFood.length === 0){
+
+    if (getFood.length === 0) {
       alert("No result Found...");
-      history.push("/")
-    } 
-    else
-      history.push(`/productDetail/${getFood[0]._id}`)
-  }   
+      history.push("/");
+    } else history.push(`/productDetail/${getFood[0]._id}`);
+  };
 
   useEffect(() => {
     // console.log(history);
@@ -55,10 +51,9 @@ const Navbar = () => {
     };
   }, []);
 
- const getAllFoodItems = () => {
+  const getAllFoodItems = () => {
     axios.get("/api/food").then((res) => {
       setFoodItems(res.data.data);
-      
     });
   };
 
@@ -67,7 +62,6 @@ const Navbar = () => {
   }, []);
 
   console.log(foodItems);
- 
 
   return (
     <div className={`nav ${show && "nav_black"}`}>
@@ -76,30 +70,30 @@ const Navbar = () => {
       </Link>
 
       <div className="nav_search">
-        <input type="text" value = {searchFood} onKeyDown = {(e)=>{
-          if(e.keyCode === 13){
-            setSearchFood("")
-            searchFoodItem()
-          }
-          }} onChange={(e)=> setSearchFood(e.target.value)} placeholder= "Search your fav food item"/>
-        <SearchIcon className="nav_searchIcon" onClick = { () =>{
-          setSearchFood("")
-          searchFoodItem();
-        }} />
+        <input
+          type="text"
+          value={searchFood}
+          onKeyDown={(e) => {
+            if (e.keyCode === 13) {
+              setSearchFood("");
+              searchFoodItem();
+            }
+          }}
+          onChange={(e) => setSearchFood(e.target.value)}
+          placeholder="Search your fav food item"
+        />
+        <SearchIcon
+          className="nav_searchIcon"
+          onClick={() => {
+            setSearchFood("");
+            searchFoodItem();
+          }}
+        />
       </div>
 
       <div className="nav_header">
         <div
           className="nav_cart"
-          onClick={() => {
-            history.push("/checkout");
-          }}
-        >
-          <ShoppingBasketIcon className="cartIcon" />
-        </div>
-
-        <div
-          className="nav_cart-f"
           onClick={() => {
             history.push("/checkout");
           }}

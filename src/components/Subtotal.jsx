@@ -1,12 +1,12 @@
 import React from "react";
 import CurrencyFormat from "react-currency-format";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { PayAction } from "../redux/actions/payAction";
 import "./css/Subtotal.css";
-import Payment from "./Payment";
 
-const Subtotal = ({ price, items ,setShowPay }) => {
-  const history = useHistory();
-
+const Subtotal = ({ price, items, setShowPay }) => {
+  const dispatch = useDispatch();
+  
   return (
     <div className="subtotal">
       <CurrencyFormat
@@ -27,10 +27,16 @@ const Subtotal = ({ price, items ,setShowPay }) => {
         thousandSeparator={true}
         prefix={"₹"}
       />
-      <button onClick = {()=> {
-        setShowPay(true);
-        // history.push("/payment/:price")
-        }}  className="subtotal_button">Proceed to checkout</button>
+      <button
+        onClick={() => {
+          setShowPay(true);
+          dispatch(PayAction(true));
+          // history.push("/payment/:price")
+        }}
+        className="subtotal_button"
+      >
+        Proceed to checkout
+      </button>
     </div>
   );
 };
