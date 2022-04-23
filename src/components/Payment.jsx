@@ -25,8 +25,7 @@ const __DEV__ = document.domain === "localhost";
 function Payment(props) {
   const history = useHistory();
   // let {price}  = useParams();
-  console.log(props);
-//   console.log(price);
+  //   console.log(props.al);
 
   async function displayRazorpay() {
     const res = await loadScript(

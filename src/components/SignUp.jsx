@@ -17,13 +17,21 @@ const SignUp = () => {
   const handleSignup = async () => {
     history.push("/signin");
     try {
-      await axios.post("/api/user/signup", {
-        userImage : img,
-        name: name,
-        email: email,
-        password: password,
-        confirmPassword: confirm,
-      });
+      if (
+        name.length > 0 &&
+        img.length > 0 &&
+        password.length > 0 &&
+        email.length > 0 &&
+        confirm.length > 0
+      ) {
+        await axios.post("/api/user/signup", {
+          userImage: img,
+          name: name,
+          email: email,
+          password: password,
+          confirmPassword: confirm,
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -32,7 +40,7 @@ const SignUp = () => {
   return (
     <div className="signup">
       <Link to="/">
-      <img src={AlanEatsLogo} className="signin_logo" alt="alan eat" />
+        <img src={AlanEatsLogo} className="signin_logo" alt="alan eat" />
       </Link>
       <div className="signin_container">
         <h1>Sign-up</h1>
@@ -43,9 +51,8 @@ const SignUp = () => {
             accept="image/*"
             placeholder="Your Name"
             onChange={(e) => {
-              setImg(URL.createObjectURL(e.target.files[0]))
-              }
-            }
+              setImg(URL.createObjectURL(e.target.files[0]));
+            }}
           />
 
           <input

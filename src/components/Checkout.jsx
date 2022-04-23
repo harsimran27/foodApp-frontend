@@ -9,7 +9,7 @@ import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { PayAction } from "../redux/actions/payAction";
 
-const Checkout = () => {
+const Checkout = ({ alanInstance }) => {
   let cartData = [];
   const dispatch = useDispatch();
   // let totalCartPrice = 0;

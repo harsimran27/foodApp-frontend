@@ -18,13 +18,15 @@ const SignIn = () => {
   const handleSignin = async () => {
     history.push(`/`);
     try {
-      let user = [];
-      user = await axios.post("/api/user/login", {
-        email: email,
-        password: password,
-      });
-      console.log(user);
-      return user;
+      if (email.length > 0 && password.length > 0) {
+        let user = [];
+        user = await axios.post("/api/user/login", {
+          email: email,
+          password: password,
+        });
+        console.log(user);
+        return user;
+      }
     } catch (err) {
       console.log(err);
     }
@@ -33,7 +35,7 @@ const SignIn = () => {
   return (
     <div className="signin">
       <Link to="/">
-      <img src={AlanEatsLogo} className="signin_logo" alt="alan eat" />
+        <img src={AlanEatsLogo} className="signin_logo" alt="alan eat" />
       </Link>
       <div className="signin_container">
         <h1>Sign-in</h1>

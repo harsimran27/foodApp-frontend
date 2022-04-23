@@ -16,6 +16,8 @@ import MainImage from './components/MainImage';
 import Payment from './components/Payment';
 import { useDispatch } from 'react-redux';
 import { PayAction } from "./redux/actions/payAction";
+import Admin from "./components/Admin";
+import ErrorPage from "./components/ErrorPage";
 
 
 let App = () => {
@@ -25,8 +27,9 @@ let App = () => {
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
 
+  console.log(user);
   useEffect(() => {
-    let alanBtnInstance = alanBtn({
+    const alanBtnInstance = alanBtn({
       key: '536cbf69313e565d5b46b5bdcf234ac52e956eca572e1d8b807a3e2338fdd0dc/stage',
       onCommand: (commandData) => {
         if (commandData.command === 'allItems') {
@@ -77,7 +80,8 @@ let App = () => {
         }
       }
     });
-  });
+
+  }, []);
 
   let addToCart = async (foodId) => {
     try {
@@ -130,6 +134,9 @@ let App = () => {
         <Checkout />
         <Footer />
       </Route>
+      {user && user[0]?.email === "jas@gmail.com" ?
+        <Route path="/admin" component={Admin} /> : <Route path="/admin" component={ErrorPage} />
+      }
     </Switch>
   );
 }
