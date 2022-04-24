@@ -8,8 +8,16 @@
 }
 
 .categoryName {
+  font-size: 80px;
+  text-align: center;
+  color: #164011;
+}
+
+.category {
+  margin-top: 40px;
   margin-left: 35px;
   font-size: 50px;
+  color: #164011;
 }
 
 .foodRow::-webkit-scrollbar {
@@ -23,7 +31,7 @@
 }
 
 .item-card img {
-  object-fit: contain;
+  object-fit: cover;
   width: 250px;
   height: 250px;
 }

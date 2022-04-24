@@ -27,8 +27,8 @@ const Checkout = ({ alanInstance }) => {
   const [map1, setMap1] = useState(map);
 
   const isPay = useSelector((state) => state.pay.isShowPay);
-  console.log("pay", isPay);
-  console.log(totalCartPrice);
+
+  // console.log(map1);
 
   const setFoodQty = () => {
     let arr = cartData;
@@ -44,10 +44,6 @@ const Checkout = ({ alanInstance }) => {
     let temp = [...map.keys()];
     return temp;
   };
-
-  // useEffect(()=>{
-  //   setFoodQty();
-  // },[])
 
   const getUser = async () => {
     axios
@@ -97,10 +93,14 @@ const Checkout = ({ alanInstance }) => {
 
   useEffect(() => {
     dispatch(PayAction(false));
+    let items = 0;
+    let price = 0;
     foodData.map((item) => {
-      setTotalItems(totalItems + map1.get(item._id));
-      setTotalCartPrice(totalCartPrice + item.price * map1.get(item._id));
-      setTotalCartPrice1(totalCartPrice1 + item.price * map1.get(item._id));
+      items = items + map1.get(item._id);
+      setTotalItems(items);
+      price = price + item.price * map1.get(item._id);
+      setTotalCartPrice(price);
+      setTotalCartPrice1(price);
     });
   }, [foodData]);
 
