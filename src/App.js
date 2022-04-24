@@ -14,10 +14,11 @@ import SignUp from "./components/SignUp";
 import Footer from "./components/Footer";
 import MainImage from './components/MainImage';
 import Payment from './components/Payment';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PayAction } from "./redux/actions/payAction";
 import Admin from "./components/Admin";
 import ErrorPage from "./components/ErrorPage";
+import { PaymentAction } from "./redux/actions/payAction";
 
 
 let App = () => {
@@ -27,12 +28,15 @@ let App = () => {
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
 
+  const { totalPrice } = useSelector(state => state.pay);
+
   console.log(user);
   useEffect(() => {
     const alanBtnInstance = alanBtn({
       key: '536cbf69313e565d5b46b5bdcf234ac52e956eca572e1d8b807a3e2338fdd0dc/stage',
       onCommand: (commandData) => {
         if (commandData.command === 'allItems') {
+
           window.scrollBy(0, window.innerHeight);
 
         } else if (commandData.command === "myItem") {
@@ -75,6 +79,7 @@ let App = () => {
           history.push('/checkout');
 
         } else if (commandData.command === "payment") {
+          dispatch(PaymentAction(true));
           dispatch(PayAction(true))
           // history.push('/p');
         }
@@ -134,8 +139,13 @@ let App = () => {
         <ProductDetail />
         <Footer />
       </Route>
-      <Route path="/checkout">
+      <Route exact path="/checkout">
         <Checkout />
+        <Footer />
+      </Route>
+      <Route exact path="/checkout/payment">
+        <Navbar />
+        <Payment price={totalPrice} />
         <Footer />
       </Route>
       {user && user[0]?.email === "jas@gmail.com" ?

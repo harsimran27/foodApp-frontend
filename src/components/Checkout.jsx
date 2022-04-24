@@ -8,13 +8,13 @@ import Payment from "./Payment";
 import Navbar from "./Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { PayAction } from "../redux/actions/payAction";
+import { useHistory } from "react-router-dom";
+import { CartPriceAction } from "../redux/actions/payAction";
 
-const Checkout = ({ alanInstance }) => {
+const Checkout = () => {
   let cartData = [];
   const dispatch = useDispatch();
-  // let totalCartPrice = 0;
-  // let totalCartPrice1 = 0;
-  // let totalItems = 0;
+  const history = useHistory();
   let [totalItems, setTotalItems] = useState(0);
   let [totalCartPrice, setTotalCartPrice] = useState(0);
   let [totalCartPrice1, setTotalCartPrice1] = useState(0);
@@ -102,20 +102,14 @@ const Checkout = ({ alanInstance }) => {
       setTotalCartPrice(price);
       setTotalCartPrice1(price);
     });
+    dispatch(CartPriceAction(price));
   }, [foodData]);
 
   return (
     <>
-      {foodData.length > 0 &&
-      // foodData.map((item) => {
-      //   console.log(item);
-      //   totalItems = totalItems + map1.get(item._id);
-      //   totalCartPrice = totalCartPrice + item.price * map1.get(item._id);
-
-      // })
-      // &&
-      isPay ? (
-        <Payment price={totalCartPrice1} />
+      {foodData.length > 0 && isPay ? (
+        // (<Payment price={totalCartPrice1} />),
+        history.push("/checkout/payment")
       ) : (
         <>
           <Navbar />

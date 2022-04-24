@@ -2,6 +2,9 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 import axios from "axios";
+import "./css/Payment.css";
+import { useDispatch, useSelector } from "react-redux";
+import { PaymentAction } from "../redux/actions/payAction";
 
 let userCredentials = localStorage.getItem("user logged in");
 let user = JSON.parse(userCredentials);
@@ -23,9 +26,15 @@ function loadScript(src) {
 const __DEV__ = document.domain === "localhost";
 
 function Payment(props) {
+  const dispatch = useDispatch();
+  const { isPayment } = useSelector((state) => state.pay);
   const history = useHistory();
   // let {price}  = useParams();
   //   console.log(props.al);
+  if (isPayment) {
+    console.log("displaying razorpay");
+    displayRazorpay();
+  }
 
   async function displayRazorpay() {
     const res = await loadScript(
@@ -68,6 +77,7 @@ function Payment(props) {
         alert("Signature :- " + response.razorpay_signature);
         axios.put(`/api/user/cart/${user[0]?._id}`).then((res) => {
           console.log(res);
+          dispatch(PaymentAction(false));
           history.push("/");
         });
       },
@@ -83,20 +93,27 @@ function Payment(props) {
 
   return (
     <>
-      <div className="App">
-        <header className="App-header">
-          <img src={AlanEatsLogo} alt="logo" />
-          <p>AlanEats</p>
-          <a
-            className="App-link"
-            style={{ cursor: "pointer" }}
-            onClick={displayRazorpay}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Place Order
-          </a>
-        </header>
+      <div className="Payment">
+        <div className="parent">
+          {/* left div */}
+          <div className="left">
+            <img src={AlanEatsLogo} alt="logo" />
+          </div>
+
+          {/* right div */}
+          <div className="right">
+            <h2>Tummy's growling 😣, let's proceed to payment</h2>
+            <button
+              className="App-link"
+              style={{ cursor: "pointer" }}
+              onClick={displayRazorpay}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Place Order
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
