@@ -4,10 +4,12 @@ import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 import axios from "axios";
 import "./css/Payment.css";
 import { useDispatch, useSelector } from "react-redux";
-import { PaymentAction } from "../redux/actions/payAction";
-
-let userCredentials = localStorage.getItem("user logged in");
-let user = JSON.parse(userCredentials);
+import {
+  OrderAction,
+  PayAction,
+  PaymentAction,
+} from "../redux/actions/payAction";
+import PayModal from "./PayModal";
 
 function loadScript(src) {
   return new Promise((resolve) => {
@@ -26,14 +28,15 @@ function loadScript(src) {
 const __DEV__ = document.domain === "localhost";
 
 function Payment(props) {
+  let userCredentials = localStorage.getItem("user logged in");
+  let user = JSON.parse(userCredentials);
   const dispatch = useDispatch();
   const { isPayment } = useSelector((state) => state.pay);
   const history = useHistory();
-  // let {price}  = useParams();
-  //   console.log(props.al);
+
   if (isPayment) {
-    console.log("displaying razorpay");
     displayRazorpay();
+    dispatch(PaymentAction(false));
   }
 
   async function displayRazorpay() {
@@ -70,15 +73,23 @@ function Payment(props) {
       description: "Thank you for ordering..",
       image: AlanEatsLogo,
       handler: function (response) {
-        alert(
-          "Payment id :- " + response.razorpay_payment_id + "successfull.."
-        );
-        alert("Order id :- " + response.razorpay_order_id);
-        alert("Signature :- " + response.razorpay_signature);
+        // alert(
+        //   `Your order has been confirmned with the Order id:
+        //   ${response.razorpay_order_id}
+        //    wait for few minutes the order is on the way 🛵`
+        // );
+
+        <PayModal
+          payId={response.razorpay_payment_id}
+          orderId={response.razorpay_order_id}
+        />;
+        dispatch(OrderAction(response.razorpay_payment_id));
         axios.put(`/api/user/cart/${user[0]?._id}`).then((res) => {
           console.log(res);
+          dispatch(PayAction(false));
           dispatch(PaymentAction(false));
-          history.push("/");
+          // history.push("/foodTracker");
+          history.push("/order/payment/success");
         });
       },
       // prefill: {

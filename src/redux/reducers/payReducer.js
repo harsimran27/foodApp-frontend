@@ -1,7 +1,8 @@
 let initialState = {
     isShowPay: false,
     totalPrice: 0,
-    isPayment : false,
+    isPayment: false,
+    orderId: ""
 }
 
 export const PayReducer = (state = initialState, action) => {
@@ -19,7 +20,12 @@ export const PayReducer = (state = initialState, action) => {
 
         case "SET_PAYMENT":
             return {
-                ...state,isPayment:action.payload
+                ...state, isPayment: action.payload
+            }
+
+        case "SET_ORDER_ID":
+            return {
+                ...state, orderId: action.payload
             }
 
         default:

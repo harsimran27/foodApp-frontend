@@ -12,10 +12,17 @@ export const CartPriceAction = (payload) => {
     }
 }
 
-export const PaymentAction = (payload)=>{
-    return{
-        type:"SET_PAYMENT",
-        payload:payload
+export const PaymentAction = (payload) => {
+    return {
+        type: "SET_PAYMENT",
+        payload: payload
+    }
+}
+
+export const OrderAction = (payload) => {
+    return {
+        type: "SET_ORDER_ID",
+        payload: payload
     }
 }
 

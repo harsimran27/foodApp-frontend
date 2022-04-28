@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import Review from "./Review";
 import AddReview from "./AddReview";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import { capitalize } from "@material-ui/core";
 
 const ProductDetail = () => {
   let { foodId } = useParams();
-  // console.log(useParams());
   let [details, setDetails] = useState([]);
   let [ingredients, setIngredients] = useState([]);
   let [reviewData, setReviewData] = useState([]);
@@ -18,14 +18,13 @@ const ProductDetail = () => {
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
 
-  
   let addToCart = async () => {
     try {
       await axios.post("/api/user/cart", {
         food: foodId,
         user: user[0]._id.trim(),
       });
-      document.location.reload(true)
+      document.location.reload(true);
     } catch (err) {
       console.log(err);
     }
@@ -33,25 +32,24 @@ const ProductDetail = () => {
 
   let getFoodDetails = () => {
     axios
-    .get(`/api/food/${foodId}`)
-    .then((res) => {
-      console.log(res);
-      setDetails(res.data.data);
-      setIngredients(res.data.data.ingredients);
-      reviewsList = res.data.data.reviews;
-    })
-    .then(async () => {
-      let arr = await getReview();
-      setReviewData(arr);
-    });
+      .get(`/api/food/${foodId}`)
+      .then((res) => {
+        console.log(res);
+        setDetails(res.data.data);
+        setIngredients(res.data.data.ingredients);
+        reviewsList = res.data.data.reviews;
+      })
+      .then(async () => {
+        let arr = await getReview();
+        setReviewData(arr);
+      });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getFoodDetails();
-  },[foodId]);
+  }, [foodId]);
 
-  console.log("FoodId:",foodId)
-
+  console.log("FoodId:", foodId);
 
   let getReview = async () => {
     try {
@@ -98,7 +96,7 @@ const ProductDetail = () => {
             {ingredients.map((ingredient) => (
               <div className="ingredient-detail" key={ingredient._id}>
                 <img src={ingredient.ingredient_Image} alt="ingredient image" />
-                <h4>{ingredient.description}</h4>
+                <h4>{capitalize(ingredient.description)}</h4>
               </div>
             ))}
           </div>

@@ -5,7 +5,6 @@ import axios from "axios";
 // import AppWrapper from "../src/AppWrapper";
 import Navbar from "./components/Navbar";
 import FoodRow from "./components/FoodRow";
-// import { BrowserRouter as Router, Switch, Route, Link, useHistory, Redirect } from "react-router-dom";
 import { Switch, Route, Link, useHistory, Redirect } from "react-router-dom";
 import ProductDetail from "./components/ProductDetail";
 import Checkout from "./components/Checkout";
@@ -19,20 +18,29 @@ import { PayAction } from "./redux/actions/payAction";
 import Admin from "./components/Admin";
 import ErrorPage from "./components/ErrorPage";
 import { PaymentAction } from "./redux/actions/payAction";
+import PayModal from './components/PayModal';
+import Tracker from './components/Tracker';
 
+// if (!userCredentials) {
+// localStorage.setItem("user logged in", JSON.stringify([{ email: null }]));
+// }
 
 let App = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
+  console.log(history);
 
-  const { totalPrice } = useSelector(state => state.pay);
+  const [alanInstance, setAlanInstance] = useState(null);
+
+
+
+  const { totalPrice, orderId } = useSelector(state => state.pay);
 
   console.log(user);
   useEffect(() => {
-    const alanBtnInstance = alanBtn({
+    setAlanInstance(alanBtn({
       key: '536cbf69313e565d5b46b5bdcf234ac52e956eca572e1d8b807a3e2338fdd0dc/stage',
       onCommand: (commandData) => {
         if (commandData.command === 'allItems') {
@@ -58,6 +66,18 @@ let App = () => {
           while (noQty-- > 0) {
             addToCart(foodId);
           }
+          if (history.location.pathname === "/checkout") {
+            setTimeout(() => {
+              history.push("/");
+              alanInstance?.setVisualState({ data: "/checkout" });
+              // alanInstance?.callProjectApi("setClientData", { value: "/checkout" }, function (error, result) {
+              // handle error and result here
+              // });
+              console.log(alanInstance)
+              // document.location.reload(true);
+              history.push("/checkout");
+            }, 3000)
+          }
         } else if (commandData.command === "removeItem") {
           let { foodId, qty } = commandData.data;
           console.log(foodId, qty);
@@ -74,6 +94,13 @@ let App = () => {
             console.log("----", noQty)
             removeFromCart(foodId);
           }
+          if (history.location.pathname === "/checkout") {
+            setTimeout(() => {
+              history.push("/");
+              // document.location.reload(true);
+              history.push("/checkout");
+            }, 3000)
+          }
         } else if (commandData.command === "showcart") {
           dispatch(PayAction(false))
           history.push('/checkout');
@@ -82,10 +109,13 @@ let App = () => {
           dispatch(PaymentAction(true));
           dispatch(PayAction(true))
           // history.push('/p');
+        } else if (commandData.command === "homepage") {
+          setTimeout(() => {
+            history.push("/");
+          }, 3000)
         }
       }
-    });
-
+    }))
   }, []);
 
   let addToCart = async (foodId) => {
@@ -111,6 +141,7 @@ let App = () => {
     }
   };
 
+
   return (
     // <AppWrapper />
     <Switch>
@@ -118,8 +149,8 @@ let App = () => {
         <Navbar />
         <MainImage />
         <FoodRow type="fast food" />
-        <FoodRow type="burger" />
         <FoodRow type="sandwich" />
+        <FoodRow type="burger" />
         <FoodRow type="noodles" />
         <FoodRow type="pizza" />
         <FoodRow type="drinks" />
@@ -148,9 +179,22 @@ let App = () => {
         <Payment price={totalPrice} />
         <Footer />
       </Route>
-      {user && user[0]?.email === "jas@gmail.com" ?
-        <Route path="/admin" component={Admin} /> : <Route path="/admin" component={ErrorPage} />
-      }
+
+      {/* {user && user[0]?.email === "jas@gmail.com" ? */}
+        {/* <Route exact path="/admin" component={Admin} /> : <Route path="/admin" component={ErrorPage} /> */}
+      {/* } */}
+
+      {/* {orderId || user[0]?.email === "jas@gmail.com" ?
+        <Route exact path="/foodtracker">
+          <Navbar />
+          <Tracker />
+          <Footer />
+        </Route> : <Route path="/foodtracker" component={ErrorPage} />} */}
+
+      <Route exact path="/order/payment/success">
+        <PayModal orderId={orderId} />
+      </Route>
+
     </Switch>
   );
 }

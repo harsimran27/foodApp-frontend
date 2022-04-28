@@ -27,8 +27,7 @@ const Checkout = () => {
   const [map1, setMap1] = useState(map);
 
   const isPay = useSelector((state) => state.pay.isShowPay);
-
-  // console.log(map1);
+  console.log("checkout food items", foodData);
 
   const setFoodQty = () => {
     let arr = cartData;
@@ -68,7 +67,7 @@ const Checkout = () => {
           return res.data.data;
         })
       );
-      // document.location.reload(true)
+      // document.location.reload(true);
       return arr;
     } catch (err) {
       console.log(err);
@@ -95,6 +94,8 @@ const Checkout = () => {
     dispatch(PayAction(false));
     let items = 0;
     let price = 0;
+    console.log(foodData);
+    console.log(map1);
     foodData.map((item) => {
       items = items + map1.get(item._id);
       setTotalItems(items);
@@ -103,12 +104,14 @@ const Checkout = () => {
       setTotalCartPrice1(price);
     });
     dispatch(CartPriceAction(price));
-  }, [foodData]);
+  }, [map1, foodData]);
+
+  console.log(foodData);
+  console.log(map1);
 
   return (
     <>
       {foodData.length > 0 && isPay ? (
-        // (<Payment price={totalCartPrice1} />),
         history.push("/checkout/payment")
       ) : (
         <>
