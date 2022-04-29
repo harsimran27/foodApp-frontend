@@ -83,12 +83,13 @@ function Payment(props) {
           payId={response.razorpay_payment_id}
           orderId={response.razorpay_order_id}
         />;
-        dispatch(OrderAction(response.razorpay_payment_id));
+        dispatch(OrderAction(response.razorpay_order_id));
         axios.put(`/api/user/cart/${user[0]?._id}`).then((res) => {
-          console.log(res);
           dispatch(PayAction(false));
           dispatch(PaymentAction(false));
           // history.push("/foodTracker");
+
+          createOrder(data.id);
           history.push("/order/payment/success");
         });
       },
@@ -101,6 +102,18 @@ function Payment(props) {
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
   }
+
+  const createOrder = async (orderId) => {
+    try {
+      console.log("order id browser", orderId);
+      await axios.post("/api/order", {
+        orderId,
+        status: "Placed",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>

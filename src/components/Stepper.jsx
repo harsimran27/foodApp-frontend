@@ -14,6 +14,7 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import "./css/Tracker.css";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,27 +60,25 @@ function getSteps() {
 //   }
 // }
 
-export default function VerticalLinearStepper() {
+export default function VerticalLinearStepper({ orderId }) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
+  const [orderData, setOrderData] = useState(null);
   let [isIcon, setIcon] = useState(0);
   //   let isIcon = setInterval(() => {
   //     val++;
   //   }, 3000);
+  const getOrderData = async () => {
+    const data = await axios.get(`/api/order/${orderId}`);
+    console.log(data);
+    setOrderData(data);
+  };
 
   useEffect(() => {
-    setTimeout(frame, 3000);
-    function frame() {
-      if (isIcon === 5) {
-        // clearInterval(isIcon);
-      } else {
-        console.log(isIcon);
-        setIcon(isIcon + 1);
-        //   element.style.width = width + '%';
-      }
-    }
+    getOrderData();
   }, [isIcon]);
+
   const iconArr = [
     <AssignmentTurnedInIcon />,
     <DoneAllIcon />,

@@ -1,9 +1,31 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 import "./css/Admin.css";
 
 const Admin = () => {
+  const [orderData, setOrderData] = useState([]);
+  const [newStatus, setNewStatus] = useState("");
+  const [orderId, setOrderId] = useState("");
+  console.log(orderData);
+  console.log(newStatus);
+  useEffect(() => {
+    axios.get(`/api/order/`).then((res) => {
+      setOrderData(res.data.data);
+    });
+  }, [orderId]);
+
+  useEffect(() => {
+    if (newStatus) {
+      axios.patch(`/api/order/${orderId}`, {
+        status: newStatus,
+        orderId: orderId,
+        createdAt: Date.now(),
+      });
+    }
+  }, [newStatus]);
+
   return (
     <div className="admin">
       <Link to="/">
@@ -19,21 +41,30 @@ const Admin = () => {
             <th>Order Status</th>
           </tr>
         </thead>
-        <tr>
-          <th>1</th>
-          <th>57023082</th>
-          <th>12 Am</th>
-          <th>
-            <select>
-              <option>Placed</option>
-              <option>Confirmed</option>
-              <option>Prepared</option>
-              <option>Out for Delivery</option>
-              <option>Completed</option>
-            </select>
-          </th>
-        </tr>
-        <tr>
+        {orderData.map((order, idx) => (
+          <tr>
+            <th>{idx + 1}</th>
+            <th>{order.orderId}</th>
+            <th>{new Date(order.createdAt).toLocaleTimeString()}</th>
+            <th>
+              <select
+                // {order?.orderId === orderId ?value={newStatus}:value={order.status} }
+                value={order.orderId === orderId ? newStatus : order.status}
+                onChange={(e) => {
+                  setNewStatus(e.target.value);
+                  setOrderId(order.orderId);
+                }}
+              >
+                <option>Placed</option>
+                <option>Confirmed</option>
+                <option>Prepared</option>
+                <option>Out for Delivery</option>
+                <option>Completed</option>
+              </select>
+            </th>
+          </tr>
+        ))}
+        {/* <tr>
           <th>2</th>
           <th>34434432</th>
           <th>2 Am</th>
@@ -74,7 +105,7 @@ const Admin = () => {
               <option>Completed</option>
             </select>
           </th>
-        </tr>
+        </tr> */}
       </table>
     </div>
   );

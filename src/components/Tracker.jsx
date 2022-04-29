@@ -63,7 +63,7 @@ const Tracker = () => {
 
            </div>
         </div> */}
-        <Stepper />
+        <Stepper orderId={orderId} />
       </div>
     </div>
   );
