@@ -109,6 +109,7 @@ function Payment(props) {
       await axios.post("/api/order", {
         orderId,
         status: "Placed",
+        createdAt: Date.now(),
       });
     } catch (err) {
       console.log(err);

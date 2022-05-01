@@ -6,25 +6,26 @@ import "./css/Admin.css";
 
 const Admin = () => {
   const [orderData, setOrderData] = useState([]);
-  const [newStatus, setNewStatus] = useState("");
-  const [orderId, setOrderId] = useState("");
-  console.log(orderData);
+  const [newStatus, setNewStatus] = useState({});
+  // const [orderId, setOrderId] = useState("");
+
+  // console.log(orderData);
   console.log(newStatus);
   useEffect(() => {
     axios.get(`/api/order/`).then((res) => {
       setOrderData(res.data.data);
     });
-  }, [orderId]);
+  }, [newStatus.orderId, newStatus.status, newStatus.createdAt]);
 
   useEffect(() => {
     if (newStatus) {
-      axios.patch(`/api/order/${orderId}`, {
-        status: newStatus,
-        orderId: orderId,
-        createdAt: Date.now(),
+      axios.patch(`/api/order/${newStatus.orderId}`, {
+        status: newStatus.status,
+        orderId: newStatus.orderId,
+        createdAt: newStatus.createdAt,
       });
     }
-  }, [newStatus]);
+  }, [newStatus.orderId, newStatus.status, newStatus.createdAt]);
 
   return (
     <div className="admin">
@@ -49,10 +50,18 @@ const Admin = () => {
             <th>
               <select
                 // {order?.orderId === orderId ?value={newStatus}:value={order.status} }
-                value={order.orderId === orderId ? newStatus : order.status}
+                value={
+                  order.orderId === newStatus.orderId
+                    ? newStatus.status
+                    : order.status
+                }
                 onChange={(e) => {
-                  setNewStatus(e.target.value);
-                  setOrderId(order.orderId);
+                  setNewStatus({
+                    orderId: order.orderId,
+                    status: e.target.value,
+                    createdAt: Date.now(),
+                  });
+                  // setOrderId(order.orderId);
                 }}
               >
                 <option>Placed</option>
