@@ -63,8 +63,15 @@
   margin-right: 50px;
 }
 
+.container-right {
+  /* display: flex; */
+  /* position: relative; */
+}
+
 .label-green {
   color: green !important;
+  font-size: 1.7rem;
+  transition: all 0.45s ease-out;
 }
 
 .label-grey {
@@ -74,3 +81,12 @@
 /* .MuiStepLabel-label {
   color: green !important;
 } */
+
+.container-right .MuiTypography-body1 {
+  font-size: 1.5rem;
+}
+
+.time {
+  font-size: 1.2rem !important;
+  color: green;
+}

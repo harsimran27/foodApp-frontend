@@ -37,8 +37,8 @@ function getSteps() {
     "Order Placed",
     "Order Confirmed",
     "Order Prepared",
-    "Out for delivery",
-    "Complete",
+    "Out for Delivery",
+    "Completed",
   ];
 }
 
@@ -65,19 +65,28 @@ export default function VerticalLinearStepper({ orderId }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const [orderData, setOrderData] = useState(null);
-  let [isIcon, setIcon] = useState(0);
+  // const [time, setTime] = useState([]);
+  // let [isIcon, setIcon] = useState(0);
   //   let isIcon = setInterval(() => {
   //     val++;
   //   }, 3000);
   const getOrderData = async () => {
+    // console.log(orderData);
     const data = await axios.get(`/api/order/${orderId}`);
-    console.log(data);
-    setOrderData(data);
+    setOrderData({ ...data.data.data });
+    // let orderTime = new Date(data.data.data.createdAt).toLocaleString("en-US", {
+    //   hour: "numeric",
+    //   minute: "numeric",
+    //   hour12: true,
+    // });
+
+    // setTime([...time, orderTime]);
+    // console.log(data.data.data);
   };
 
   useEffect(() => {
     getOrderData();
-  }, [isIcon]);
+  }, [orderData]);
 
   const iconArr = [
     <AssignmentTurnedInIcon />,
@@ -86,14 +95,6 @@ export default function VerticalLinearStepper({ orderId }) {
     <LocalShippingIcon />,
     <EmojiEmotionsIcon />,
   ];
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -108,22 +109,38 @@ export default function VerticalLinearStepper({ orderId }) {
               <div
                 className="container-left"
                 style={
-                  index === isIcon ? { color: "green" } : { color: "grey" }
+                  index === orderData?.status
+                    ? {
+                        color: "green",
+                        fontSize: "1.7rem",
+                        transition: "all 0.5s ease-in-out",
+                      }
+                    : { color: "grey" }
                 }
               >
                 {iconArr[index]}
               </div>
               <div className="container-right">
                 <Typography
-                  className={index === isIcon ? "label-green" : "label-grey"}
+                  className={
+                    index === orderData?.status ? "label-green" : "label-grey"
+                  }
                 >
                   {label}
                 </Typography>
-                <StepContent>
-                  {/* <Typography>{getStepContent(index)}</Typography> */}
-                  <div className={classes.actionsContainer}>
-                    <div>
-                      {/* <Button
+                <Typography className="time">
+                  {orderData?.status === index
+                    ? new Date(orderData?.createdAt).toLocaleString("en-US", {
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      })
+                    : null}
+                </Typography>
+                {/* <StepContent> */}
+                {/* <div className={classes.actionsContainer}> */}
+                {/* <div> */}
+                {/* <Button
                         disabled={activeStep === 0}
                         onClick={handleBack}
                         className={classes.button}
@@ -138,35 +155,11 @@ export default function VerticalLinearStepper({ orderId }) {
                       >
                         {activeStep === steps.length - 1 ? "Finish" : "Next"}
                       </Button> */}
-                    </div>
-                  </div>
-                </StepContent>
+                {/* </div> */}
+                {/* </div> */}
+                {/* </StepContent> */}
               </div>
             </div>
-            {/* {iconArr[index]} */}
-            {/* <StepLabel>{label}</StepLabel> */}
-            {/* <StepContent> */}
-            {/* <Typography>{getStepContent(index)}</Typography> */}
-            {/* <div className={classes.actionsContainer}> */}
-            {/* <div> */}
-            {/* <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    className={classes.button}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                  </Button> */}
-            {/* </div> */}
-            {/* </div> */}
-            {/* </StepContent> */}
           </Step>
         ))}
       </Stepper>

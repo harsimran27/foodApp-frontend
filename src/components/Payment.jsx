@@ -62,7 +62,7 @@ function Payment(props) {
       },
     }).then((t) => t.json());
 
-    console.log(data);
+    // console.log(data);
 
     const options = {
       key: __DEV__ ? "rzp_test_oKt4aYMDlmmRMX" : "PRODUCTION_KEY",
@@ -84,12 +84,17 @@ function Payment(props) {
           orderId={response.razorpay_order_id}
         />;
         dispatch(OrderAction(response.razorpay_order_id));
+        localStorage.setItem(
+          "orderId",
+          JSON.stringify(response.razorpay_order_id)
+        );
         axios.put(`/api/user/cart/${user[0]?._id}`).then((res) => {
           dispatch(PayAction(false));
           dispatch(PaymentAction(false));
           // history.push("/foodTracker");
 
           createOrder(data.id);
+          
           history.push("/order/payment/success");
         });
       },
@@ -105,11 +110,12 @@ function Payment(props) {
 
   const createOrder = async (orderId) => {
     try {
-      console.log("order id browser", orderId);
+      // console.log("order id browser", orderId);
       await axios.post("/api/order", {
         orderId,
         status: "Placed",
         createdAt: Date.now(),
+        username: user[0].name,
       });
     } catch (err) {
       console.log(err);

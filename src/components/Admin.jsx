@@ -3,19 +3,28 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 import "./css/Admin.css";
+import { capitalize } from "@material-ui/core";
 
 const Admin = () => {
   const [orderData, setOrderData] = useState([]);
   const [newStatus, setNewStatus] = useState({});
-  // const [orderId, setOrderId] = useState("");
 
-  // console.log(orderData);
-  console.log(newStatus);
+  const orderId = JSON.parse(localStorage.getItem("orderId"));
+  const time = JSON.parse(localStorage.getItem("orderTime"));
+  console.log(time);
+
   useEffect(() => {
     axios.get(`/api/order/`).then((res) => {
-      setOrderData(res.data.data);
+      setOrderData([...res.data.data]);
+      
+      localStorage.setItem(
+        "orderTime",
+        JSON.stringify([res?.data?.data?.createdAt])
+      );
+      console.log(res.data.data);
     });
-  }, [newStatus.orderId, newStatus.status, newStatus.createdAt]);
+  }, [newStatus.orderId, newStatus.status, newStatus.createdAt, orderData]);
+  console.log(orderData?.createdAt);
 
   useEffect(() => {
     if (newStatus) {
@@ -24,6 +33,7 @@ const Admin = () => {
         orderId: newStatus.orderId,
         createdAt: newStatus.createdAt,
       });
+      // localStorage.setItem("orderTime", JSON.stringify([newStatus?.createdAt]));
     }
   }, [newStatus.orderId, newStatus.status, newStatus.createdAt]);
 
@@ -37,19 +47,26 @@ const Admin = () => {
         <thead>
           <tr>
             <th>S.No</th>
+            <th>Customer Name</th>
             <th>Order Id</th>
-            <th>Order Time</th>
+            <th>Order Status Time</th>
             <th>Order Status</th>
           </tr>
         </thead>
         {orderData.map((order, idx) => (
           <tr>
             <th>{idx + 1}</th>
+            <th>{capitalize(order.username)}</th>
             <th>{order.orderId}</th>
-            <th>{new Date(order.createdAt).toLocaleTimeString()}</th>
+            <th>
+              {new Date(order.createdAt).toLocaleString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })}
+            </th>
             <th>
               <select
-                // {order?.orderId === orderId ?value={newStatus}:value={order.status} }
                 value={
                   order.orderId === newStatus.orderId
                     ? newStatus.status
@@ -73,48 +90,6 @@ const Admin = () => {
             </th>
           </tr>
         ))}
-        {/* <tr>
-          <th>2</th>
-          <th>34434432</th>
-          <th>2 Am</th>
-          <th>
-            <select>
-              <option>Placed</option>
-              <option>Confirmed</option>
-              <option>Prepared</option>
-              <option>Out for Delivery</option>
-              <option>Completed</option>
-            </select>
-          </th>
-        </tr>
-        <tr>
-          <th>3</th>
-          <th>34835445</th>
-          <th>5 pm</th>
-          <th>
-            <select>
-              <option>Placed</option>
-              <option>Confirmed</option>
-              <option>Prepared</option>
-              <option>Out for Delivery</option>
-              <option>Completed</option>
-            </select>
-          </th>
-        </tr>
-        <tr>
-          <th>4</th>
-          <th>34434432</th>
-          <th>3 pm</th>
-          <th>
-            <select>
-              <option>Placed</option>
-              <option>Confirmed</option>
-              <option>Prepared</option>
-              <option>Out for Delivery</option>
-              <option>Completed</option>
-            </select>
-          </th>
-        </tr> */}
       </table>
     </div>
   );

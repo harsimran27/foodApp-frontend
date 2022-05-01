@@ -30,15 +30,11 @@ let App = () => {
   const history = useHistory();
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
-  console.log(history);
+  const orderId = JSON.parse(localStorage.getItem("orderId"));
 
   const [alanInstance, setAlanInstance] = useState(null);
+  const { totalPrice } = useSelector(state => state.pay);
 
-
-
-  const { totalPrice, orderId } = useSelector(state => state.pay);
-
-  console.log(user);
   useEffect(() => {
     setAlanInstance(alanBtn({
       key: '536cbf69313e565d5b46b5bdcf234ac52e956eca572e1d8b807a3e2338fdd0dc/stage',
@@ -70,11 +66,6 @@ let App = () => {
             setTimeout(() => {
               history.push("/");
               alanInstance?.setVisualState({ data: "/checkout" });
-              // alanInstance?.callProjectApi("setClientData", { value: "/checkout" }, function (error, result) {
-              // handle error and result here
-              // });
-              console.log(alanInstance)
-              // document.location.reload(true);
               history.push("/checkout");
             }, 3000)
           }
@@ -97,7 +88,6 @@ let App = () => {
           if (history.location.pathname === "/checkout") {
             setTimeout(() => {
               history.push("/");
-              // document.location.reload(true);
               history.push("/checkout");
             }, 3000)
           }
@@ -108,7 +98,6 @@ let App = () => {
         } else if (commandData.command === "payment") {
           dispatch(PaymentAction(true));
           dispatch(PayAction(true))
-          // history.push('/p');
         } else if (commandData.command === "homepage") {
           setTimeout(() => {
             history.push("/");
@@ -180,28 +169,28 @@ let App = () => {
         <Footer />
       </Route>
 
-      {/* {user && user[0]?.email === "jas@gmail.com" ?
+      {user && user[0]?.email === "jas@gmail.com" ?
         <Route exact path="/admin" component={Admin} /> : <Route path="/admin" component={ErrorPage} />
-      } */}
-      <Route exact path="/admin" component={Admin} />
+      }
+      {/* <Route exact path="/admin" component={Admin} /> */}
 
-      {/* {orderId || user[0]?.email === "jas@gmail.com" ?
+      {orderId && user[0]?.email !== "jas@gmail.com" ?
         <Route exact path="/foodtracker">
           <Navbar />
           <Tracker />
           <Footer />
-        </Route> : <Route path="/foodtracker" component={ErrorPage} />} */}
-      <Route exact path="/foodtracker">
+        </Route> : <Route path="/foodtracker" component={ErrorPage} />}
+      {/* <Route exact path={`/foodtracker`}>
         <Navbar />
         <Tracker />
         <Footer />
-      </Route>
+      </Route> */}
 
       <Route exact path="/order/payment/success">
         <PayModal orderId={orderId} />
       </Route>
 
-    </Switch>
+    </Switch >
   );
 }
 
