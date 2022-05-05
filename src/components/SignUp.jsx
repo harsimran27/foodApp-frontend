@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
+import Resizer from "react-image-file-resizer";
 
 const SignUp = () => {
   let history = useHistory();
@@ -19,7 +20,6 @@ const SignUp = () => {
     try {
       if (
         name.length > 0 &&
-        img.length > 0 &&
         password.length > 0 &&
         email.length > 0 &&
         confirm.length > 0
@@ -31,11 +31,61 @@ const SignUp = () => {
           password: password,
           confirmPassword: confirm,
         });
+        // axios({
+        //   url: "/api/user/signup",
+        //   method: "POST",
+        //   data: {
+        //     userImage: img,
+        //     name: name,
+        //     email: email,
+        //     password: password,
+        //     confirmPassword: confirm,
+        //   },
+        //   maxContentLength: "infinity",
+        //   maxBodyLength: "infinity",
+        // });
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  const updateImg = (file) => {
+    console.log(file);
+    Resizer.imageFileResizer(
+      file, //is the file of the new image that can now be uploaded...
+      300, // is the maxWidth of the  new image
+      300, // is the maxHeight of the  new image
+      "JPEG", // is the compressFormat of the  new image
+      50, // is the quality of the  new image
+      0, // is the rotatoion of the  new image
+      (uri) => {
+        setImg(uri);
+        console.log(uri);
+      }, // is the callBack function of the new image URI
+      "base64" // is the output type of the new image
+    );
+  };
+
+  // const updateImg = (file) => {
+  //   if (!file) {
+  //     setImg("");
+  //     return;
+  //   }
+
+  //   fileToDataUri(file).then((dataUri) => {
+  //     setImg(dataUri);
+  //   });
+  // };
+
+  // const fileToDataUri = (file) =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = (event) => {
+  //       resolve(event.target.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   });
 
   return (
     <div className="signup">
@@ -51,7 +101,8 @@ const SignUp = () => {
             accept="image/*"
             placeholder="Your Name"
             onChange={(e) => {
-              setImg(URL.createObjectURL(e.target.files[0]));
+              updateImg(e.target.files[0]);
+              // setImg(URL.createObjectURL(e.target.files[0]));
             }}
           />
 

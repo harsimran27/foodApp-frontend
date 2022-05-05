@@ -30,6 +30,7 @@ let App = () => {
   const history = useHistory();
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
+  console.log(user);
   const orderId = JSON.parse(localStorage.getItem("orderId"));
 
   const [alanInstance, setAlanInstance] = useState(null);
@@ -132,7 +133,6 @@ let App = () => {
 
 
   return (
-    // <AppWrapper />
     <Switch>
       <Route exact path="/">
         <Navbar />
@@ -169,22 +169,16 @@ let App = () => {
         <Footer />
       </Route>
 
-      {user && user[0]?.email === "jas@gmail.com" ?
+      {user !== null && user[0]?.email === "jaskeerat@gmail.com" ?
         <Route exact path="/admin" component={Admin} /> : <Route path="/admin" component={ErrorPage} />
       }
-      {/* <Route exact path="/admin" component={Admin} /> */}
 
-      {orderId && user[0]?.email !== "jas@gmail.com" ?
+      {orderId && user !== null && user[0]?.email !== "jaskeerat@gmail.com" ?
         <Route exact path="/foodtracker">
           <Navbar />
           <Tracker />
           <Footer />
         </Route> : <Route path="/foodtracker" component={ErrorPage} />}
-      {/* <Route exact path={`/foodtracker`}>
-        <Navbar />
-        <Tracker />
-        <Footer />
-      </Route> */}
 
       <Route exact path="/order/payment/success">
         <PayModal orderId={orderId} />

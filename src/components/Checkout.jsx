@@ -127,31 +127,46 @@ const Checkout = () => {
                 items={totalItems}
               />
             </div>
-            <h1>Shopping Cart</h1>
-            <div className="checkout_items">
-              {foodData.map((foodItem) => (
-                <div className="foodItem_card">
-                  <div className="cartItem_image">
-                    <img src={foodItem.image_url} alt="" />
-                  </div>
-                  <div className="cartItem_info">
-                    <h3>{foodItem.label}</h3>
-                    <p>₹{foodItem.price}</p>
-                    <button
-                      className="deleteBtn"
-                      onClick={() => {
-                        if (map1.get(foodItem._id) > 1)
-                          map1.set(foodItem._id, map1.get(foodItem._id) - 1);
-                        removeFromCart(foodItem._id);
-                      }}
-                    >
-                      Delete
-                    </button>
-                    <p>{`Qty: ${map1.get(foodItem._id)}`}</p>
-                  </div>
+            {foodData.length > 0 ? (
+              <>
+                <h1>Shopping Cart</h1>
+                <div className="checkout_items">
+                  {foodData.map((foodItem) => (
+                    <div className="foodItem_card">
+                      <div className="cartItem_image">
+                        <img src={foodItem.image_url} alt="" />
+                      </div>
+                      <div className="cartItem_info">
+                        <h3>{foodItem.label}</h3>
+                        <p>₹{foodItem.price}</p>
+                        <button
+                          className="deleteBtn"
+                          onClick={() => {
+                            if (map1.get(foodItem._id) > 1)
+                              map1.set(
+                                foodItem._id,
+                                map1.get(foodItem._id) - 1
+                              );
+                            removeFromCart(foodItem._id);
+                          }}
+                        >
+                          Delete
+                        </button>
+                        <p>{`Qty: ${map1.get(foodItem._id)}`}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            ) : (
+              <div className="emptyCart">
+                <img
+                  className="emptyCart__img"
+                  src="https://vividparts.com/site_assets/images/empty_cart.gif"
+                  alt="cart is empty"
+                />
+              </div>
+            )}
           </div>
         </>
       )}

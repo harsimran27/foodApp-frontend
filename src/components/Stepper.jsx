@@ -15,6 +15,7 @@ import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import "./css/Tracker.css";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,30 +63,26 @@ function getSteps() {
 
 export default function VerticalLinearStepper({ orderId }) {
   const classes = useStyles();
+  const history = useHistory();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const [orderData, setOrderData] = useState(null);
-  // const [time, setTime] = useState([]);
-  // let [isIcon, setIcon] = useState(0);
-  //   let isIcon = setInterval(() => {
-  //     val++;
-  //   }, 3000);
   const getOrderData = async () => {
-    // console.log(orderData);
     const data = await axios.get(`/api/order/${orderId}`);
     setOrderData({ ...data.data.data });
-    // let orderTime = new Date(data.data.data.createdAt).toLocaleString("en-US", {
-    //   hour: "numeric",
-    //   minute: "numeric",
-    //   hour12: true,
-    // });
-
-    // setTime([...time, orderTime]);
-    // console.log(data.data.data);
   };
 
   useEffect(() => {
-    getOrderData();
+    console.log("order data da status", orderData?.status);
+    if (orderData?.status === 4) {
+      setTimeout(() => {
+        console.log(orderData);
+        localStorage.setItem("orderId", null);
+        history.push("/");
+      }, 3000);
+    } else {
+      getOrderData();
+    }
   }, [orderData]);
 
   const iconArr = [
@@ -137,27 +134,6 @@ export default function VerticalLinearStepper({ orderId }) {
                       })
                     : null}
                 </Typography>
-                {/* <StepContent> */}
-                {/* <div className={classes.actionsContainer}> */}
-                {/* <div> */}
-                {/* <Button
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                        className={classes.button}
-                      >
-                        Back
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleNext}
-                        className={classes.button}
-                      >
-                        {activeStep === steps.length - 1 ? "Finish" : "Next"}
-                      </Button> */}
-                {/* </div> */}
-                {/* </div> */}
-                {/* </StepContent> */}
               </div>
             </div>
           </Step>

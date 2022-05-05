@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 import "./css/Admin.css";
 import { capitalize } from "@material-ui/core";
+import result from "../Images/result.gif";
 
 const Admin = () => {
   const [orderData, setOrderData] = useState([]);
@@ -16,7 +17,7 @@ const Admin = () => {
   useEffect(() => {
     axios.get(`/api/order/`).then((res) => {
       setOrderData([...res.data.data]);
-      
+
       localStorage.setItem(
         "orderTime",
         JSON.stringify([res?.data?.data?.createdAt])
@@ -27,7 +28,14 @@ const Admin = () => {
   console.log(orderData?.createdAt);
 
   useEffect(() => {
-    if (newStatus) {
+    console.log(newStatus);
+    if (newStatus.status === "Completed") {
+      // setTimeout(() => {
+      axios.delete(`/api/order/${newStatus.orderId}`);
+      // setNewStatus({});
+      // }, 3000);
+    } else if (newStatus) {
+      console.log("inside update");
       axios.patch(`/api/order/${newStatus.orderId}`, {
         status: newStatus.status,
         orderId: newStatus.orderId,
@@ -40,57 +48,71 @@ const Admin = () => {
   return (
     <div className="admin">
       <Link to="/">
-        <img src={AlanEatsLogo} alt="alan eat" />
+        <img className="logo__img" src={AlanEatsLogo} alt="alan eat" />
       </Link>
       <h1>Admin Panel</h1>
-      <table className="orderTable">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Customer Name</th>
-            <th>Order Id</th>
-            <th>Order Status Time</th>
-            <th>Order Status</th>
-          </tr>
-        </thead>
-        {orderData.map((order, idx) => (
-          <tr>
-            <th>{idx + 1}</th>
-            <th>{capitalize(order.username)}</th>
-            <th>{order.orderId}</th>
-            <th>
-              {new Date(order.createdAt).toLocaleString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })}
-            </th>
-            <th>
-              <select
-                value={
-                  order.orderId === newStatus.orderId
-                    ? newStatus.status
-                    : order.status
-                }
-                onChange={(e) => {
-                  setNewStatus({
-                    orderId: order.orderId,
-                    status: e.target.value,
-                    createdAt: Date.now(),
-                  });
-                  // setOrderId(order.orderId);
-                }}
-              >
-                <option>Placed</option>
-                <option>Confirmed</option>
-                <option>Prepared</option>
-                <option>Out for Delivery</option>
-                <option>Completed</option>
-              </select>
-            </th>
-          </tr>
-        ))}
-      </table>
+      {orderData.length > 0 ? (
+        <>
+          <table className="orderTable">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Customer Name</th>
+                <th>Order Id</th>
+                <th>Order Status Time</th>
+                <th>Order Status</th>
+              </tr>
+            </thead>
+            {orderData.map((order, idx) => (
+              <tr>
+                <th>{idx + 1}</th>
+                <th>{capitalize(order.username)}</th>
+                <th>{order.orderId}</th>
+                <th>
+                  {new Date(order.createdAt).toLocaleString("en-US", {
+                    hour: "numeric",
+                    minute: "numeric",
+                    hour12: true,
+                  })}
+                </th>
+                <th>
+                  <select
+                    value={
+                      order.orderId === newStatus.orderId
+                        ? newStatus.status
+                        : order.status
+                    }
+                    onChange={(e) => {
+                      setNewStatus({
+                        orderId: order.orderId,
+                        status: e.target.value,
+                        createdAt: Date.now(),
+                      });
+                      // setOrderId(order.orderId);
+                    }}
+                  >
+                    <option>Placed</option>
+                    <option>Confirmed</option>
+                    <option>Prepared</option>
+                    <option>Out for Delivery</option>
+                    <option>Completed</option>
+                  </select>
+                </th>
+              </tr>
+            ))}
+          </table>
+        </>
+      ) : (
+        <div className="emptyOrders">
+          <img
+            className="emptyOrders__img"
+            src="https://delivery.namkalam.in/wp-content/uploads/2021/03/delivery.gif"
+            alt=""
+          />
+          <img className="secondary__text" src={result} alt="" />
+          {/* <h1 className="emptyOrders__info">No order to track...</h1> */}
+        </div>
+      )}
     </div>
   );
 };
