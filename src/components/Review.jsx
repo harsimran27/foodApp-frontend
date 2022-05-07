@@ -11,9 +11,10 @@ const Review = ({ reviewDetails }) => {
 
   const getUserData = async () => {
     let userData;
-    console.log("rEVIEWdETAILS : ",reviewDetails);
     try {
-     userData = await axios.get(`/api/user/${reviewDetails.user}`);
+     userData = await axios.get(
+       `https://alaneats.herokuapp.com/api/user/${reviewDetails.user}`
+     );
       setUserName(userData.data.user.name);
       setUserImage(userData.data.user.userImage);
     } catch (err) {

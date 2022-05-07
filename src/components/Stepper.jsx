@@ -50,8 +50,11 @@ export default function VerticalLinearStepper({ orderId }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
   const [orderData, setOrderData] = useState(null);
+
   const getOrderData = async () => {
-    const data = await axios.get(`/api/order/${orderId}`);
+    const data = await axios.get(
+      `https://alaneats.herokuapp.com/api/order/${orderId}`
+    );
     setOrderData({ ...data.data.data });
   };
 
@@ -59,7 +62,6 @@ export default function VerticalLinearStepper({ orderId }) {
     console.log("order data da status", orderData?.status);
     if (orderData?.status === 4) {
       setTimeout(() => {
-        console.log(orderData);
         localStorage.setItem("orderId", null);
         history.push("/");
       }, 3000);

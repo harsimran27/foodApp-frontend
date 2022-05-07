@@ -30,7 +30,7 @@ const AddReview = ({ itemDetails }) => {
   const handleReviewRequest = async () => {
     console.log("Value",value);
     try {
-      await axios.post("/api/review", {
+      await axios.post("https://alaneats.herokuapp.com/api/review", {
         description: reviewDescription,
         rating: value,
         food: itemDetails._id,

@@ -20,7 +20,7 @@ const ProductDetail = () => {
 
   let addToCart = async () => {
     try {
-      await axios.post("/api/user/cart", {
+      await axios.post("https://alaneats.herokuapp.com/api/user/cart", {
         food: foodId,
         user: user[0]._id.trim(),
       });
@@ -32,7 +32,7 @@ const ProductDetail = () => {
 
   let getFoodDetails = () => {
     axios
-      .get(`/api/food/${foodId}`)
+      .get(`https://alaneats.herokuapp.com/api/food/${foodId}`)
       .then((res) => {
         setDetails(res.data.data);
         setIngredients(res.data.data.ingredients);
@@ -53,7 +53,9 @@ const ProductDetail = () => {
       let arr = [];
       arr = await Promise.all(
         reviewsList.map(async (id) => {
-          let res = await axios.get(`/api/review/${id}`);
+          let res = await axios.get(
+            `https://alaneats.herokuapp.com/api/review/${id}`
+          );
           return res.data.data;
         })
       );

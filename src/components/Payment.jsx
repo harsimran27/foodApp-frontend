@@ -102,7 +102,7 @@ function Payment(props) {
 
   const createOrder = async (orderId) => {
     try {
-      await axios.post("/api/order", {
+      await axios.post("https://alaneats.herokuapp.com/api/order", {
         orderId,
         status: "Placed",
         createdAt: Date.now(),

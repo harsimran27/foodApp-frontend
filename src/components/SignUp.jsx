@@ -28,14 +28,16 @@ const SignUp = () => {
         confirm.length > 0
       ) {
         e.preventDefault();
-        const user = await axios.post("/api/user/signup", {
-          userImage: img,
-          name: name,
-          email: email,
-          password: password,
-          confirmPassword: confirm,
-        });
-        console.log(user.data.user);
+        const user = await axios.post(
+          "https://alaneats.herokuapp.com/api/user/signup",
+          {
+            userImage: img,
+            name: name,
+            email: email,
+            password: password,
+            confirmPassword: confirm,
+          }
+        );
         setUserInfo({ ...user.data.user });
         history.push("/signin");
       }

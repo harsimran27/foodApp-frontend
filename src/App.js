@@ -110,7 +110,7 @@ let App = () => {
   let addToCart = async (foodId) => {
     try {
       console.log("voice script run", foodId);
-      await axios.post("/api/user/cart", {
+      await axios.post("https://alaneats.herokuapp.com/api/user/cart", {
         food: foodId,
         user: user[0]._id.trim(),
       });
@@ -121,7 +121,7 @@ let App = () => {
 
   let removeFromCart = async (foodId) => {
     try {
-      await axios.post("/api/user/cart/delete", {
+      await axios.post("https://alaneats.herokuapp.com/api/user/cart/delete", {
         user: user[0]._id,
         food: foodId,
       });

@@ -23,7 +23,6 @@ const PayModal = ({ orderId }) => {
   let user = JSON.parse(userCredentials);
 
   useEffect(() => {
-    console.log(isPay);
     dispatch(PayAction(false));
     dispatch(PaymentAction(false));
   }, []);
