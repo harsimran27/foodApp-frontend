@@ -16,10 +16,8 @@
 
 .alan_logo img {
   object-fit: contain;
-  /* width: 260px; */
   height: 113px;
   border-radius: 30%;
-  /* margin-left: 15px; */
   padding-bottom: 0px;
   margin: auto;
 }
@@ -41,7 +39,6 @@
   width: 80%;
   display: flex;
   flex-wrap: wrap;
-  /* flex-direction: column; */
   align-items: center;
 }
 

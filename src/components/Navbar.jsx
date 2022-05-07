@@ -29,7 +29,6 @@ const Navbar = () => {
         return food;
       }
     });
-    console.log(getFood);
 
     if (getFood.length === 0) {
       alert("No result Found...");
@@ -38,7 +37,6 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    // console.log(history);
     window.addEventListener("scroll", () => {
       if (window.scrollY > 50) {
         handleShow(true);
@@ -60,8 +58,6 @@ const Navbar = () => {
   useEffect(() => {
     getAllFoodItems();
   }, []);
-
-  console.log(foodItems);
 
   return (
     <div className={`nav ${show && "nav_black"}`}>
@@ -92,6 +88,24 @@ const Navbar = () => {
       </div>
 
       <div className="nav_header">
+        {user &&
+        user[0] !== null &&
+        user[0]?.email === "jaskeerat@gmail.com" ? (
+          <div className="adminLink">
+            <button
+              className="adminBtn"
+              onClick={() => {
+                history.push("/admin");
+              }}
+            >
+              <img
+                style={{ width: "50px", height: "50px" }}
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTllTESQNMm-IWUp38QV_ubWFe97fa-tSSdrQ&usqp=CAU"
+                alt=""
+              />
+            </button>
+          </div>
+        ) : null}
         <div
           className="nav_cart"
           onClick={() => {

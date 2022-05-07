@@ -34,7 +34,6 @@ const ProductDetail = () => {
     axios
       .get(`/api/food/${foodId}`)
       .then((res) => {
-        console.log(res);
         setDetails(res.data.data);
         setIngredients(res.data.data.ingredients);
         reviewsList = res.data.data.reviews;
@@ -48,8 +47,6 @@ const ProductDetail = () => {
   useEffect(() => {
     getFoodDetails();
   }, [foodId]);
-
-  console.log("FoodId:", foodId);
 
   let getReview = async () => {
     try {

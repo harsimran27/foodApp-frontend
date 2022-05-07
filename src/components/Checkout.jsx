@@ -67,7 +67,6 @@ const Checkout = () => {
           return res.data.data;
         })
       );
-      // document.location.reload(true);
       return arr;
     } catch (err) {
       console.log(err);
@@ -94,8 +93,6 @@ const Checkout = () => {
     dispatch(PayAction(false));
     let items = 0;
     let price = 0;
-    console.log(foodData);
-    console.log(map1);
     foodData.map((item) => {
       items = items + map1.get(item._id);
       setTotalItems(items);
@@ -105,9 +102,6 @@ const Checkout = () => {
     });
     dispatch(CartPriceAction(price));
   }, [map1, foodData]);
-
-  console.log(foodData);
-  console.log(map1);
 
   return (
     <>

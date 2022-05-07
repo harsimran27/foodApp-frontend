@@ -2,11 +2,17 @@ import React from "react";
 
 const ErrorPage = () => {
   return (
-    <div id="wrapper">
-      <img src="https://i.imgur.com/qIufhof.png" />
-      <div id="info">
-        <h3>This page could not be found</h3>
-      </div>
+    <div
+      id="wrapper"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        backgroundColor: "#f7f9fb",
+        height: "100vh",
+      }}
+    >
+      <img src="https://cdn.dribbble.com/users/718859/screenshots/3267029/jisunpark_404-error.gif" />
+      <div id="info"></div>
     </div>
   );
 };

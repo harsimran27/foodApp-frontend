@@ -30,7 +30,6 @@ let App = () => {
   const history = useHistory();
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
-  console.log(user);
   const orderId = JSON.parse(localStorage.getItem("orderId"));
 
   const [alanInstance, setAlanInstance] = useState(null);

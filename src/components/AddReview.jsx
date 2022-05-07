@@ -62,7 +62,6 @@ const AddReview = ({ itemDetails }) => {
               value={value}
               precision={0.5}
               onChange={(event, newValue) => {
-                  // console.log(newValue,value);
                 if(newValue === null){
                   newValue = 0.5
                   setValue(0.5);
@@ -77,9 +76,6 @@ const AddReview = ({ itemDetails }) => {
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            {/* {value !== null && (
-              <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
-            )} */}
           </Box>
         </div>
       </div>

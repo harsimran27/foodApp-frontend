@@ -56,23 +56,3 @@ select {
   width: 80%;
   height: 70%;
 }
-
-/* .emptyOrders__info {
-  color: rgb(191, 191, 191);
-  font-weight: 600;
-  animation: leftToRight 2s ease-in;
-}
-
-@keyframes leftToRight {
-  0% {
-    transform: translateX(-200px);
-  }
-
-  50% {
-    transform: translateX(100px);
-  }
-
-  100% {
-    transform: translate(0px);
-  }
-} */

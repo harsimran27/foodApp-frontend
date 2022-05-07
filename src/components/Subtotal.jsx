@@ -31,7 +31,6 @@ const Subtotal = ({ price, items, setShowPay }) => {
         onClick={() => {
           setShowPay(true);
           dispatch(PayAction(true));
-          // history.push("/payment/:price")
         }}
         className="subtotal_button"
       >

@@ -65,7 +65,8 @@
 .nav_cart {
   color: #164011;
   transform: scale(1.2);
-  padding-right: 15px;
+  padding-right: 5px;
+  margin: 0px 20px;
 }
 
 .loggedUser {
@@ -109,4 +110,11 @@
 
 .nav_search .MuiSvgIcon-root {
   font-size: 2.5rem !important;
+}
+
+.adminBtn {
+  margin-right: 25px;
+  border: none;
+  outline: none;
+  background-color: white;
 }

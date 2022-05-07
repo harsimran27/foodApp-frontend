@@ -1,7 +1,5 @@
 .main {
   background-color: #fff;
-  /* position: relative; */
-  /* top: 100px; */
   margin: 8rem 5rem;
   margin-bottom: 0;
   height: 50vh;
@@ -63,11 +61,6 @@
   margin-right: 50px;
 }
 
-.container-right {
-  /* display: flex; */
-  /* position: relative; */
-}
-
 .label-green {
   color: green !important;
   font-size: 1.7rem;
@@ -77,10 +70,6 @@
 .label-grey {
   color: grey !important;
 }
-
-/* .MuiStepLabel-label {
-  color: green !important;
-} */
 
 .container-right .MuiTypography-body1 {
   font-size: 1.5rem;

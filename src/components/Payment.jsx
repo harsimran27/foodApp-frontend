@@ -62,8 +62,6 @@ function Payment(props) {
       },
     }).then((t) => t.json());
 
-    // console.log(data);
-
     const options = {
       key: __DEV__ ? "rzp_test_oKt4aYMDlmmRMX" : "PRODUCTION_KEY",
       currency: data.currency,
@@ -73,11 +71,6 @@ function Payment(props) {
       description: "Thank you for ordering..",
       image: AlanEatsLogo,
       handler: function (response) {
-        // alert(
-        //   `Your order has been confirmned with the Order id:
-        //   ${response.razorpay_order_id}
-        //    wait for few minutes the order is on the way 🛵`
-        // );
 
         <PayModal
           payId={response.razorpay_payment_id}
@@ -91,7 +84,6 @@ function Payment(props) {
         axios.put(`/api/user/cart/${user[0]?._id}`).then((res) => {
           dispatch(PayAction(false));
           dispatch(PaymentAction(false));
-          // history.push("/foodTracker");
 
           createOrder(data.id);
           
@@ -110,7 +102,6 @@ function Payment(props) {
 
   const createOrder = async (orderId) => {
     try {
-      // console.log("order id browser", orderId);
       await axios.post("/api/order", {
         orderId,
         status: "Placed",

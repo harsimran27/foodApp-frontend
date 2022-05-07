@@ -12,7 +12,6 @@ const Admin = () => {
 
   const orderId = JSON.parse(localStorage.getItem("orderId"));
   const time = JSON.parse(localStorage.getItem("orderTime"));
-  console.log(time);
 
   useEffect(() => {
     axios.get(`/api/order/`).then((res) => {
@@ -22,26 +21,19 @@ const Admin = () => {
         "orderTime",
         JSON.stringify([res?.data?.data?.createdAt])
       );
-      console.log(res.data.data);
     });
   }, [newStatus.orderId, newStatus.status, newStatus.createdAt, orderData]);
-  console.log(orderData?.createdAt);
 
   useEffect(() => {
     console.log(newStatus);
     if (newStatus.status === "Completed") {
-      // setTimeout(() => {
       axios.delete(`/api/order/${newStatus.orderId}`);
-      // setNewStatus({});
-      // }, 3000);
     } else if (newStatus) {
-      console.log("inside update");
       axios.patch(`/api/order/${newStatus.orderId}`, {
         status: newStatus.status,
         orderId: newStatus.orderId,
         createdAt: newStatus.createdAt,
       });
-      // localStorage.setItem("orderTime", JSON.stringify([newStatus?.createdAt]));
     }
   }, [newStatus.orderId, newStatus.status, newStatus.createdAt]);
 
@@ -88,7 +80,6 @@ const Admin = () => {
                         status: e.target.value,
                         createdAt: Date.now(),
                       });
-                      // setOrderId(order.orderId);
                     }}
                   >
                     <option>Placed</option>
@@ -110,7 +101,6 @@ const Admin = () => {
             alt=""
           />
           <img className="secondary__text" src={result} alt="" />
-          {/* <h1 className="emptyOrders__info">No order to track...</h1> */}
         </div>
       )}
     </div>

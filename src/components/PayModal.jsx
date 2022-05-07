@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { capitalize } from "@material-ui/core";
 import { PayAction, PaymentAction } from "../redux/actions/payAction";
 import { useDispatch, useSelector } from "react-redux";
+import { AlertMessage } from "./AlertMessage";
 
 const PayModal = ({ orderId }) => {
   const [show, setShow] = useState(true);
@@ -12,15 +13,11 @@ const PayModal = ({ orderId }) => {
   const dispatch = useDispatch();
 
   const isPay = useSelector((state) => state.pay.isShowPay);
-  console.log(isPay);
 
   const handleClose = () => {
     setShow(false);
     history.push("/foodTracker");
   };
-  // const handleShow = () => {
-  //   setShow(true);
-  // };
 
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
@@ -33,10 +30,6 @@ const PayModal = ({ orderId }) => {
 
   return (
     <div>
-      {/* <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button> */}
-
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{`Thanks ${capitalize(
@@ -54,6 +47,7 @@ const PayModal = ({ orderId }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <AlertMessage message="Your transaction has been done successfully $$" />
     </div>
   );
 };

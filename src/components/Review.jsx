@@ -19,7 +19,6 @@ const Review = ({ reviewDetails }) => {
     } catch (err) {
       console.log(err);
     }
-    console.log(userData);
   };
 
 

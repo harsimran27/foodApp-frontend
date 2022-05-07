@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
 import Resizer from "react-image-file-resizer";
+import { AlertMessage } from "./AlertMessage";
 
 const SignUp = () => {
   let history = useHistory();
@@ -14,9 +15,11 @@ const SignUp = () => {
   const [password, passwordSet] = useState("");
   const [email, emailSet] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [userInfo, setUserInfo] = useState({});
 
-  const handleSignup = async () => {
-    history.push("/signin");
+  const handleSignup = async (e) => {
+    // setTimeout(() => {
+    // }, 7000);
     try {
       if (
         name.length > 0 &&
@@ -24,26 +27,17 @@ const SignUp = () => {
         email.length > 0 &&
         confirm.length > 0
       ) {
-        await axios.post("/api/user/signup", {
+        e.preventDefault();
+        const user = await axios.post("/api/user/signup", {
           userImage: img,
           name: name,
           email: email,
           password: password,
           confirmPassword: confirm,
         });
-        // axios({
-        //   url: "/api/user/signup",
-        //   method: "POST",
-        //   data: {
-        //     userImage: img,
-        //     name: name,
-        //     email: email,
-        //     password: password,
-        //     confirmPassword: confirm,
-        //   },
-        //   maxContentLength: "infinity",
-        //   maxBodyLength: "infinity",
-        // });
+        console.log(user.data.user);
+        setUserInfo({ ...user.data.user });
+        history.push("/signin");
       }
     } catch (err) {
       console.log(err);
@@ -51,7 +45,6 @@ const SignUp = () => {
   };
 
   const updateImg = (file) => {
-    console.log(file);
     Resizer.imageFileResizer(
       file, //is the file of the new image that can now be uploaded...
       300, // is the maxWidth of the  new image
@@ -66,26 +59,6 @@ const SignUp = () => {
       "base64" // is the output type of the new image
     );
   };
-
-  // const updateImg = (file) => {
-  //   if (!file) {
-  //     setImg("");
-  //     return;
-  //   }
-
-  //   fileToDataUri(file).then((dataUri) => {
-  //     setImg(dataUri);
-  //   });
-  // };
-
-  // const fileToDataUri = (file) =>
-  //   new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.onload = (event) => {
-  //       resolve(event.target.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   });
 
   return (
     <div className="signup">
@@ -102,7 +75,6 @@ const SignUp = () => {
             placeholder="Your Name"
             onChange={(e) => {
               updateImg(e.target.files[0]);
-              // setImg(URL.createObjectURL(e.target.files[0]));
             }}
           />
 
@@ -135,13 +107,16 @@ const SignUp = () => {
 
           <button
             className="sign_inButton"
-            onClick={() => {
-              handleSignup();
+            onClick={(e) => {
+              handleSignup(e);
             }}
           >
             Sign up
           </button>
         </form>
+        {userInfo?.name?.length > 0 ? (
+          <AlertMessage message="Account created successfully" />
+        ) : null}
         <p>
           By signing-in you agree to the Alan Eats conditions. Please see our
           Privacy Notice
