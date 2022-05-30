@@ -118,9 +118,9 @@ let App = () => {
           let { noteValue } = commandData.data;
           dispatch(NoteToChefAction(noteValue));
         }
-        //  else if (commandData.command === "showInstructions"){
-        //   history.push();
-        // }
+         else if (commandData.command === "showInstructions"){
+          
+        }
       }
     }))
   }, []);
