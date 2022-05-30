@@ -2,7 +2,9 @@ let initialState = {
     isShowPay: false,
     totalPrice: 0,
     isPayment: false,
-    orderId: ""
+    orderId: "",
+    deliveryAddress: "",
+    noteToChef: ""
 }
 
 export const PayReducer = (state = initialState, action) => {
@@ -27,6 +29,19 @@ export const PayReducer = (state = initialState, action) => {
             return {
                 ...state, orderId: action.payload
             }
+
+        case "SET_DELIVERY_ADDRESS":
+
+            return {
+                ...state, deliveryAddress: action.payload
+            }
+
+        case "SET_NOTE_FOR_CHEF":
+            console.log("in reducer", action.payload)
+            return {
+                ...state, noteToChef: action.payload
+            }
+
 
         default:
             return state;

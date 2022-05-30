@@ -2,7 +2,6 @@ import './App.css';
 import alanBtn from '@alan-ai/alan-sdk-web';
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import AppWrapper from "../src/AppWrapper";
 import Navbar from "./components/Navbar";
 import FoodRow from "./components/FoodRow";
 import { Switch, Route, Link, useHistory, Redirect } from "react-router-dom";
@@ -14,16 +13,13 @@ import Footer from "./components/Footer";
 import MainImage from './components/MainImage';
 import Payment from './components/Payment';
 import { useDispatch, useSelector } from 'react-redux';
-import { PayAction } from "./redux/actions/payAction";
+import { NoteToChefAction, PayAction } from "./redux/actions/payAction";
 import Admin from "./components/Admin";
 import ErrorPage from "./components/ErrorPage";
 import { PaymentAction } from "./redux/actions/payAction";
 import PayModal from './components/PayModal';
 import Tracker from './components/Tracker';
-
-// if (!userCredentials) {
-// localStorage.setItem("user logged in", JSON.stringify([{ email: null }]));
-// }
+import { DeliveryAddressAction } from "./redux/actions/payAction";
 
 let App = () => {
   const dispatch = useDispatch();
@@ -32,8 +28,13 @@ let App = () => {
   let user = JSON.parse(userCredentials);
   const orderId = JSON.parse(localStorage.getItem("orderId"));
 
+  const showModal = useSelector(state => state.AlanModal);
+
+  const [newAddress, setAddress] = useState("");
   const [alanInstance, setAlanInstance] = useState(null);
   const { totalPrice } = useSelector(state => state.pay);
+
+
 
   useEffect(() => {
     setAlanInstance(alanBtn({
@@ -71,7 +72,6 @@ let App = () => {
           }
         } else if (commandData.command === "removeItem") {
           let { foodId, qty } = commandData.data;
-          console.log(foodId, qty);
           foodId = foodId.toString();
           qty = qty.toString();
           let noQty = 0;
@@ -102,7 +102,25 @@ let App = () => {
           setTimeout(() => {
             history.push("/");
           }, 3000)
+        } else if (commandData.command === "goBack") {
+          if (history.location.pathname !== "/") {
+            history.goBack();
+          }
+        } else if (commandData.command === "goHome") {
+          if (history.location.pathname !== "/") {
+            history.push("/");
+          }
+        } else if (commandData.command === "setAddress") {
+          console.log(commandData);
+          let { address } = commandData.data;
+          dispatch(DeliveryAddressAction(address))
+        } else if (commandData.command === "addNote") {
+          let { noteValue } = commandData.data;
+          dispatch(NoteToChefAction(noteValue));
         }
+        //  else if (commandData.command === "showInstructions"){
+        //   history.push();
+        // }
       }
     }))
   }, []);
@@ -134,7 +152,8 @@ let App = () => {
   return (
     <Switch>
       <Route exact path="/">
-        <Navbar />
+
+        <Navbar showModal={showModal} />
         <MainImage />
         <FoodRow type="fast food" />
         <FoodRow type="sandwich" />
@@ -154,16 +173,18 @@ let App = () => {
         <SignUp />
       </Route>
       <Route path="/productDetail/:foodId" >
-        <Navbar />
+        <Navbar showModal={showModal} />
         <ProductDetail />
         <Footer />
       </Route>
       <Route exact path="/checkout">
+
+        <Navbar showModal={showModal} />
         <Checkout />
         <Footer />
       </Route>
       <Route exact path="/checkout/payment">
-        <Navbar />
+        <Navbar showModal={showModal} />
         <Payment price={totalPrice} />
         <Footer />
       </Route>
@@ -174,9 +195,9 @@ let App = () => {
 
       {orderId && user !== null && user[0]?.email !== "jaskeerat@gmail.com" ?
         <Route exact path="/foodtracker">
-          <Navbar />
+          <Navbar showModal={showModal} />
           <Tracker />
-          <Footer />
+          {/* <Footer /> */}
         </Route> : <Route path="/foodtracker" component={ErrorPage} />}
 
       <Route exact path="/order/payment/success">

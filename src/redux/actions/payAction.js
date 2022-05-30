@@ -26,3 +26,17 @@ export const OrderAction = (payload) => {
     }
 }
 
+export const DeliveryAddressAction = (payload) => {
+    return {
+        type: "SET_DELIVERY_ADDRESS",
+        payload: payload
+    }
+}
+
+export const NoteToChefAction = (payload) => {
+    return {
+        type: "SET_NOTE_FOR_CHEF",
+        payload: payload
+    }
+}
+

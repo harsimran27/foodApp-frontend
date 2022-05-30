@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { userCreator } from "../redux/actions/userActions";
 import AlanEatsLogo from "../Images/AlanEatsLogo.png";
+import { ShowModal } from "../redux/actions/ModalAction";
 
 const SignIn = () => {
   let dispatch = useDispatch();
@@ -15,7 +16,7 @@ const SignIn = () => {
   const [email, emailSet] = useState("");
   let userData = [];
 
-  const handleSignin = async () => {
+  const handleSignin = async (e) => {
     history.push(`/`);
     try {
       if (email.length > 0 && password.length > 0) {
@@ -49,16 +50,19 @@ const SignIn = () => {
           <h5>Password</h5>
           <input
             type="password"
+            readonly
+            onfocus="$(this).removeAttr('readonly');"
             placeholder="**********"
             onChange={(e) => passwordSet(e.target.value)}
           />
           <button
             className="sign_inButton"
-            onClick={async () => {
-              let user = await handleSignin();
+            onClick={async (e) => {
+              let user = await handleSignin(e);
               userData.push(user?.data?.user);
               localStorage.setItem("user logged in", JSON.stringify(userData));
               dispatch(userCreator(true));
+              dispatch(ShowModal(true));
             }}
           >
             Sign In
@@ -68,6 +72,7 @@ const SignIn = () => {
           By signing-in you agree to the Alan Eats conditions. Please see our
           Privacy Notice
         </p>
+
         <Link to="/signup">
           <button className="sign_inRegisterButton">
             Create Your Alan Eats Account

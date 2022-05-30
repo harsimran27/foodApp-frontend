@@ -51,6 +51,8 @@ const Admin = () => {
                 <th>S.No</th>
                 <th>Customer Name</th>
                 <th>Order Id</th>
+                <th>Delivery Address</th>
+                <th>Note To Chef</th>
                 <th>Order Status Time</th>
                 <th>Order Status</th>
               </tr>
@@ -60,6 +62,8 @@ const Admin = () => {
                 <th>{idx + 1}</th>
                 <th>{capitalize(order.username)}</th>
                 <th>{order.orderId}</th>
+                <th>{order.deliveryAddress}</th>
+                <th>{order.noteToChef}</th>
                 <th>
                   {new Date(order.createdAt).toLocaleString("en-US", {
                     hour: "numeric",

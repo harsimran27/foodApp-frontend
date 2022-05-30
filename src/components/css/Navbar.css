@@ -118,3 +118,16 @@
   outline: none;
   background-color: white;
 }
+
+.instructionsBtn {
+  border: none;
+  background-color: #fff;
+  font-weight: 500;
+  margin-left: -2.5rem;
+}
+
+.micImg {
+  width: 50px !important;
+  height: 50px !important;
+  margin-right: 40px;
+}

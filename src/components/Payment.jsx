@@ -31,7 +31,10 @@ function Payment(props) {
   let userCredentials = localStorage.getItem("user logged in");
   let user = JSON.parse(userCredentials);
   const dispatch = useDispatch();
-  const { isPayment } = useSelector((state) => state.pay);
+  const { isPayment, deliveryAddress, noteToChef } = useSelector(
+    (state) => state.pay
+  );
+  console.log("in payment", noteToChef);
   const history = useHistory();
 
   if (isPayment) {
@@ -71,7 +74,6 @@ function Payment(props) {
       description: "Thank you for ordering..",
       image: AlanEatsLogo,
       handler: function (response) {
-
         <PayModal
           payId={response.razorpay_payment_id}
           orderId={response.razorpay_order_id}
@@ -86,7 +88,7 @@ function Payment(props) {
           dispatch(PaymentAction(false));
 
           createOrder(data.id);
-          
+
           history.push("/order/payment/success");
         });
       },
@@ -107,6 +109,8 @@ function Payment(props) {
         status: "Placed",
         createdAt: Date.now(),
         username: user[0].name,
+        deliveryAddress,
+        noteToChef,
       });
     } catch (err) {
       console.log(err);

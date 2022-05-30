@@ -29,8 +29,18 @@
 .subtotal_gift {
   display: flex;
   align-items: center;
+  /* justify-content: center; */
 }
 
-.subtotal_gift > input {
+/* .subtotal_gift > input {
   margin-right: 5px;
+} */
+
+.subtotal__input {
+  border: none;
+  outline: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 80%;
+  padding-left: 0px;
 }
